@@ -1,0 +1,14 @@
+security:
+
+    encoders:
+        Sulu\Bundle\SecurityBundle\Entity\User: bcrypt
+
+    providers:
+        sulu:
+            id: sulu_security.user_provider
+
+
+
+sulu_security:
+    checker:
+        enabled: true

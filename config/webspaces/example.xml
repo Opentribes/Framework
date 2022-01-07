@@ -4,9 +4,11 @@
           xsi:schemaLocation="http://schemas.sulu.io/webspace/webspace http://schemas.sulu.io/webspace/webspace-1.1.xsd">
     <!-- See: http://docs.sulu.io/en/latest/book/webspaces.html how to configure your webspace-->
 
-    <name>example.com</name>
+    <name>opentribes.ddev.site</name>
     <key>example</key>
-
+    <security>
+        <system>Website</system>
+    </security>
     <localizations>
         <!-- See: http://docs.sulu.io/en/latest/book/localization.html how to add new localizations -->
         <localization language="en" default="true"/>
@@ -36,7 +38,7 @@
 
     <portals>
         <portal>
-            <name>example.com</name>
+            <name>opentribes.ddev.site</name>
             <key>example</key>
 
             <environments>

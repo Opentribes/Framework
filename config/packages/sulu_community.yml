@@ -1,0 +1,4 @@
+sulu_community:
+  webspaces:
+    example:
+      from: "%env(SULU_ADMIN_EMAIL)%"

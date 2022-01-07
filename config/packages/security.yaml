@@ -20,6 +20,8 @@ security:
         - { path: ^/admin/$, roles: IS_AUTHENTICATED_ANONYMOUSLY }
         - { path: ^/admin/p/, roles: IS_AUTHENTICATED_ANONYMOUSLY }
         - { path: ^/admin, roles: ROLE_USER }
+        - { path: '/profile', roles: ROLE_USER }
+        - { path: '/completion', roles: ROLE_USER }
 
     firewalls:
         dev:
@@ -38,7 +40,24 @@ security:
             logout:
                 path: sulu_admin.logout
                 success_handler: sulu_security.logout_success_handler
-
+        example:
+            pattern: ^/
+            anonymous: lazy
+              # The login and logout routes need to be created.
+              # For an advanced user management with registration and opt-in emails have a look at the:
+              # https://github.com/sulu/SuluCommunityBundle
+            # Also have a look at the user context based caching when you output user role specific data
+            # https://docs.sulu.io/en/2.2/cookbook/user-context-caching.html
+            form_login:
+                login_path: sulu_community.login
+                check_path: sulu_community.login
+            logout:
+                path: sulu_community.logout
+                target: /
+            remember_me:
+                secret:   "%kernel.secret%"
+                lifetime: 604800 # 1 week in seconds
+                path:     /
 #        website:
 #            pattern: ^/
 #            anonymous: lazy
