@@ -57,7 +57,8 @@
         "symfony/monolog-bundle": "^3.1",
         "symfony/security-bundle": "^5.4",
         "symfony/swiftmailer-bundle": "^3.5",
-        "symfony/twig-bundle": "^5.4"
+        "symfony/twig-bundle": "^5.4",
+        "symfony/webpack-encore-bundle": "^1.13"
     },
     "require-dev": {
         "phpcr/phpcr-shell": "^1.3",

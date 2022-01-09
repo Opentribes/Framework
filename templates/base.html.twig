@@ -2,9 +2,9 @@
 <html lang="{{ app.request.locale|split('_')[0] }}">
 <head>
     <meta charset="utf-8">
+    <title>Test</title>
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-
     {% block meta %}
         {% include "@SuluWebsite/Extension/seo.html.twig" with {
             "seo": extension.seo|default([]),
@@ -14,43 +14,48 @@
         } %}
     {% endblock %}
 
-    {% block style %}{% endblock %}
+    {% block style %}
+        {{ encore_entry_link_tags('app') }}
+    {% endblock %}
 </head>
 <body>
-    <header>
+    <header class="">
         {% block header %}
-            <nav>
-                <ul>
-                    <li>
-                        <a href="{{ sulu_content_root_path() }}">Homepage</a>
-                    </li>
+            <nav class="navbar" role="navigation" aria-label="main navigation">
+                <div class="container">
+                <div id="mainNavbar" class="navbar-menu">
+                    <div class="navbar-start">
+                        <a  href="{{ sulu_content_root_path() }}" class="navbar-item">
+                            Homepage
+                        </a>
+                        {% for item in sulu_navigation_root_tree('main') %}
 
-                    {% for item in sulu_navigation_root_tree('main') %}
-                        <li>
-                            <a href="{{ sulu_content_path(item.url, item.webspaceKey) }}"
-                               title="{{ item.title }}">{{ item.title }}</a>
-                        </li>
-                    {% endfor %}
-                </ul>
+                                <a class="navbar-item" href="{{ sulu_content_path(item.url, item.webspaceKey) }}"
+                                   title="{{ item.title }}">{{ item.title }}</a>
+
+                        {% endfor %}
+                    </div>
+                </div>
+                </div>
             </nav>
         {% endblock %}
     </header>
 
-    <form action="{{ path('sulu_search.website_search') }}" method="GET">
-        <input name="q" type="text" placeholder="Search"/>
-        <input type="submit" value="Go"/>
-    </form>
 
     <main>
-        {% block content %}{% endblock %}
+        <div class="section">
+            <div class="container">
+                {% block content %}{% endblock %}
+            </div>
+
+        </div>
+
     </main>
 
-    <footer>
-        {% block footer %}
-            <p>Copyright {{ 'now'|date('Y') }} SULU</p>
-        {% endblock %}
-    </footer>
 
-    {% block javascripts %}{% endblock %}
+
+    {% block javascripts %}
+        {{ encore_entry_script_tags('app') }}
+    {% endblock %}
 </body>
 </html>
