@@ -20,6 +20,7 @@
         "build": "encore production --progress"
     },
     "dependencies": {
-        "bulma": "^0.9.3"
+        "bulma": "^0.9.3",
+        "three": "^0.136.0"
     }
 }
