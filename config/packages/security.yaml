@@ -1,4 +1,5 @@
 security:
+    enable_authenticator_manager: true
     access_decision_manager:
         strategy: unanimous
         allow_if_all_abstain: true
@@ -29,7 +30,6 @@ security:
             security: false
         admin:
             pattern: ^/admin(\/|$)
-            anonymous: true
             lazy: true
             provider: sulu
             entry_point: sulu_security.authentication_entry_point
@@ -40,9 +40,9 @@ security:
             logout:
                 path: sulu_admin.logout
                 success_handler: sulu_security.logout_success_handler
-        example:
+        website:
             pattern: ^/
-            anonymous: lazy
+            provider: sulu
               # The login and logout routes need to be created.
               # For an advanced user management with registration and opt-in emails have a look at the:
               # https://github.com/sulu/SuluCommunityBundle
@@ -58,24 +58,6 @@ security:
                 secret:   "%kernel.secret%"
                 lifetime: 604800 # 1 week in seconds
                 path:     /
-#        website:
-#            pattern: ^/
-#            anonymous: lazy
-#            # The login and logout routes need to be created.
-#            # For an advanced user management with registration and opt-in emails have a look at the:
-#            # https://github.com/sulu/SuluCommunityBundle
-#            # Also have a look at the user context based caching when you output user role specific data
-#            # https://docs.sulu.io/en/2.2/cookbook/user-context-caching.html
-#            form_login:
-#                login_path: login
-#                check_path: login
-#            logout:
-#                path: logout
-#                target: /
-#            remember_me:
-#                secret:   "%kernel.secret%"
-#                lifetime: 604800 # 1 week in seconds
-#                path:     /
 
 sulu_security:
     checker:

@@ -1,4 +1,4 @@
 sulu_community:
   webspaces:
-    example:
+    opentribes:
       from: "%env(SULU_ADMIN_EMAIL)%"

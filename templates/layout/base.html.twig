@@ -2,7 +2,7 @@
 <html lang="{{ app.request.locale|split('_')[0] }}">
 <head>
     <meta charset="utf-8">
-    <title>Test</title>
+    <title>{% block title %} {% endblock %}</title>
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     {% block meta %}
@@ -19,43 +19,45 @@
     {% endblock %}
 </head>
 <body>
-    <header class="">
-        {% block header %}
-            <nav class="navbar" role="navigation" aria-label="main navigation">
-                <div class="container">
+
+{% block header %}
+<header class="">
+
+        <nav class="navbar" role="navigation" aria-label="main navigation">
+            <div class="container">
                 <div id="mainNavbar" class="navbar-menu">
                     <div class="navbar-start">
-                        <a  href="{{ sulu_content_root_path() }}" class="navbar-item">
+                        {% block navigation %}
+                        <a href="{{ sulu_content_root_path() }}" class="navbar-item">
                             Homepage
                         </a>
-                        {% for item in sulu_navigation_root_tree('main') %}
-
+                            {% for item in sulu_navigation_root_tree('main') %}
                                 <a class="navbar-item" href="{{ sulu_content_path(item.url, item.webspaceKey) }}"
                                    title="{{ item.title }}">{{ item.title }}</a>
-
-                        {% endfor %}
+                            {% endfor %}
+                        {% endblock %}
                     </div>
                 </div>
-                </div>
-            </nav>
-        {% endblock %}
-    </header>
-
-
-    <main>
-        <div class="section">
-            <div class="container">
-                {% block content %}{% endblock %}
             </div>
+        </nav>
 
+</header>
+{% endblock %}
+
+{% block main %}
+<main>
+    <div class="section">
+        <div class="container">
+            {% block content %}{% endblock %}
         </div>
 
-    </main>
+    </div>
 
+</main>
+{% endblock %}
 
-
-    {% block javascripts %}
-        {{ encore_entry_script_tags('app') }}
-    {% endblock %}
+{% block javascripts %}
+    {{ encore_entry_script_tags('app') }}
+{% endblock %}
 </body>
 </html>
