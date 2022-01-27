@@ -1,0 +1,39 @@
+OpenTribes\Core\Entity\Building:
+    type: entity
+    table: ot_buildings
+    id:
+        id:
+            type: integer
+            nullable: false
+            options:
+                unsigned: false
+            id: true
+            generator:
+                strategy: AUTO
+    fields:
+        createdAt:
+            type: datetime
+            nullable: false
+            options:
+                default: CURRENT_TIMESTAMP
+            column: created_at
+        slot:
+            type: string
+            nullable: false
+            length: 255
+            options:
+                fixed: false
+        level:
+            type: integer
+            nullable: false
+            options:
+                unsigned: false
+                default: '1'
+        status:
+            type: BuildStatus
+            nullable: false
+            length: 0
+            options:
+                fixed: false
+                default: default
+    lifecycleCallbacks: {  }
