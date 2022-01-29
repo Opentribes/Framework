@@ -20,9 +20,9 @@ final class Version20220107211007 extends AbstractMigration
     public function up(Schema $schema): void
     {
         $sql = <<<SQL
-     CREATE TABLE com_blacklist_item (id INT AUTO_INCREMENT NOT NULL, pattern VARCHAR(191) NOT NULL, regexpPattern VARCHAR(191) NOT NULL, type VARCHAR(255) NOT NULL, UNIQUE INDEX UNIQ_23CBBF74A3BCFC8E (pattern), INDEX IDX_23CBBF743D4A32EB (regexpPattern), PRIMARY KEY(id)) DEFAULT CHARACTER SET utf8mb4 COLLATE `utf8mb4_unicode_ci` ENGINE = InnoDB;
-     CREATE TABLE com_blacklist_user (id INT AUTO_INCREMENT NOT NULL, token VARCHAR(191) DEFAULT NULL, type INT NOT NULL, webspaceKey VARCHAR(255) NOT NULL, userId INT DEFAULT NULL, UNIQUE INDEX UNIQ_B1434C235F37A13B (token), UNIQUE INDEX UNIQ_B1434C2364B64DCC (userId), INDEX IDX_B1434C235F37A13B (token), PRIMARY KEY(id)) DEFAULT CHARACTER SET utf8mb4 COLLATE `utf8mb4_unicode_ci` ENGINE = InnoDB;
-     CREATE TABLE com_email_token (id INT AUTO_INCREMENT NOT NULL, token VARCHAR(191) NOT NULL, userId INT DEFAULT NULL, UNIQUE INDEX UNIQ_F01439A75F37A13B (token), UNIQUE INDEX UNIQ_F01439A764B64DCC (userId), INDEX IDX_F01439A75F37A13B (token), PRIMARY KEY(id)) DEFAULT CHARACTER SET utf8mb4 COLLATE `utf8mb4_unicode_ci` ENGINE = InnoDB;
+     CREATE TABLE IF NOT EXISTS com_blacklist_item (id INT AUTO_INCREMENT NOT NULL, pattern VARCHAR(191) NOT NULL, regexpPattern VARCHAR(191) NOT NULL, type VARCHAR(255) NOT NULL, UNIQUE INDEX UNIQ_23CBBF74A3BCFC8E (pattern), INDEX IDX_23CBBF743D4A32EB (regexpPattern), PRIMARY KEY(id)) DEFAULT CHARACTER SET utf8mb4 COLLATE `utf8mb4_unicode_ci` ENGINE = InnoDB;
+     CREATE TABLE IF NOT EXISTS com_blacklist_user (id INT AUTO_INCREMENT NOT NULL, token VARCHAR(191) DEFAULT NULL, type INT NOT NULL, webspaceKey VARCHAR(255) NOT NULL, userId INT DEFAULT NULL, UNIQUE INDEX UNIQ_B1434C235F37A13B (token), UNIQUE INDEX UNIQ_B1434C2364B64DCC (userId), INDEX IDX_B1434C235F37A13B (token), PRIMARY KEY(id)) DEFAULT CHARACTER SET utf8mb4 COLLATE `utf8mb4_unicode_ci` ENGINE = InnoDB;
+     CREATE TABLE IF NOT EXISTS com_email_token (id INT AUTO_INCREMENT NOT NULL, token VARCHAR(191) NOT NULL, userId INT DEFAULT NULL, UNIQUE INDEX UNIQ_F01439A75F37A13B (token), UNIQUE INDEX UNIQ_F01439A764B64DCC (userId), INDEX IDX_F01439A75F37A13B (token), PRIMARY KEY(id)) DEFAULT CHARACTER SET utf8mb4 COLLATE `utf8mb4_unicode_ci` ENGINE = InnoDB;
      ALTER TABLE com_blacklist_user ADD CONSTRAINT FK_B1434C2364B64DCC FOREIGN KEY (userId) REFERENCES se_users (id) ON DELETE CASCADE;
      ALTER TABLE com_email_token ADD CONSTRAINT FK_F01439A764B64DCC FOREIGN KEY (userId) REFERENCES se_users (id) ON DELETE CASCADE;
      ALTER TABLE tr_trash_items CHANGE restoreData restoreData JSON NOT NULL, CHANGE restoreType restoreType VARCHAR(191) DEFAULT NULL, CHANGE restoreOptions restoreOptions JSON NOT NULL, CHANGE resourceSecurityContext resourceSecurityContext VARCHAR(191) DEFAULT NULL, CHANGE resourceSecurityObjectType resourceSecurityObjectType VARCHAR(191) DEFAULT NULL, CHANGE resourceSecurityObjectId resourceSecurityObjectId VARCHAR(191) DEFAULT NULL, CHANGE defaultLocale defaultLocale VARCHAR(191) DEFAULT NULL, CHANGE userId userId INT DEFAULT NULL;
@@ -67,9 +67,9 @@ SQL;
 
     public function down(Schema $schema): void
     {
-        $this->addSql("DROP TABLE com_blacklist_item");
-        $this->addSql("DROP TABLE com_blacklist_user");
-        $this->addSql("DROP TABLE com_email_token");
+        $this->addSql("DROP TABLE IF EXISTS com_blacklist_item");
+        $this->addSql("DROP TABLE IF EXISTS com_blacklist_user");
+        $this->addSql("DROP TABLE IF EXISTS com_email_token");
 
     }
 }

@@ -1,0 +1,5 @@
+services:
+  App\Repository\DBALBuildingRepository:
+    public: true
+    arguments:
+      [ '@doctrine.orm.default_entity_manager' ]

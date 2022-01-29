@@ -9,7 +9,7 @@ OpenTribes\Core\Entity\Building:
                 unsigned: false
             id: true
             generator:
-                strategy: AUTO
+                strategy: IDENTITY
     fields:
         createdAt:
             type: datetime
@@ -36,4 +36,25 @@ OpenTribes\Core\Entity\Building:
             options:
                 fixed: false
                 default: default
+        locationX:
+            type: integer
+            nullable: false
+            options:
+                unsigned: false
+                default: '0'
+            column: location_x
+        locationY:
+            type: integer
+            nullable: false
+            options:
+                unsigned: false
+                default: '0'
+            column: location_y
+        username:
+            type: string
+            nullable: false
+            length: 255
+            options:
+                fixed: false
+                default: ''
     lifecycleCallbacks: {  }

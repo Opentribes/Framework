@@ -20,7 +20,7 @@ final class Version20220122192628 extends AbstractMigration
     public function up(Schema $schema): void
     {
         $sql = <<<SQL
-CREATE TABLE `ot_buildings` (
+CREATE TABLE IF NOT EXISTS`ot_buildings` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `created_at` timestamp NOT NULL DEFAULT current_timestamp(),
   `slot` varchar(255) NOT NULL,
@@ -36,7 +36,7 @@ SQL;
     public function down(Schema $schema): void
     {
       $sql = <<<SQL
-DROP TABLE `ot_buildings`
+DROP TABLE IF EXISTS `ot_buildings`
 SQL;
         $this->addSql($sql);
     }

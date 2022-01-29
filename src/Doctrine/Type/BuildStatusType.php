@@ -30,8 +30,13 @@ final class BuildStatusType extends Type
         return BuildStatus::from($value);
     }
 
-    public function convertToDatabaseValueSQL($sqlExpr, AbstractPlatform $platform)
+    /**
+     * @param BuildStatus $value
+     * @param AbstractPlatform $platform
+     * @return mixed|string
+     */
+    public function convertToDatabaseValue($value, AbstractPlatform $platform)
     {
-        return BuildStatus::from($sqlExpr)->value;
+        return $value->value;
     }
 }
