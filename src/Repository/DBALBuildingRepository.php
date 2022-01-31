@@ -34,12 +34,16 @@ final class DBALBuildingRepository implements BuildingRepository
 
     public function userCanBuildAtLocation(int $locationX, int $locationY, string $username): bool
     {
-        return false;
+        $buildings = $this->repository->findBy([
+            'locationX'=>$locationX,
+            'locationY'=>$locationY,
+            'username' =>$username
+        ]);
+        return count($buildings) > 0;
     }
 
     public function add(Building $building): void
     {
-        // TODO: Implement add() method.
+        $this->entityManager->persist($building);
     }
-
 }

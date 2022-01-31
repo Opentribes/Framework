@@ -4,12 +4,13 @@ namespace App\DataFixtures;
 
 use Doctrine\Bundle\FixturesBundle\Fixture;
 use Doctrine\Persistence\ObjectManager;
+use OpenTribes\Core\Entity\Building;
 
 class BuildingFixture extends Fixture
 {
     public function load(ObjectManager $manager): void
     {
-        $building = new \OpenTribes\Core\Entity\Building('test', 10);
+        $building = new Building('test', 10);
         $building->setLocationX(10);
         $building->setLocationY(10);
         $building->setSlot('1');
