@@ -1,12 +1,14 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\DataFixtures;
 
 use Doctrine\Bundle\FixturesBundle\Fixture;
 use Doctrine\Persistence\ObjectManager;
 use OpenTribes\Core\Entity\Building;
 
-class BuildingFixture extends Fixture
+final class BuildingFixture extends Fixture
 {
     public function load(ObjectManager $manager): void
     {
@@ -17,7 +19,6 @@ class BuildingFixture extends Fixture
         $building->setUsername('test');
 
         $manager->persist($building);
-
 
         $manager->flush();
     }

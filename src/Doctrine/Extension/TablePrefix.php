@@ -5,7 +5,6 @@ declare(strict_types=1);
 namespace App\Doctrine\Extension;
 
 use Doctrine\ORM\Event\LoadClassMetadataEventArgs;
-use Doctrine\ORM\Mapping\ClassMetadataInfo;
 
 final class TablePrefix
 {
@@ -13,14 +12,14 @@ final class TablePrefix
     {
     }
 
-    public function loadClassMetadata(LoadClassMetadataEventArgs $eventArgs)
+    public function loadClassMetadata(LoadClassMetadataEventArgs $eventArgs): void
     {
         $classMetadata = $eventArgs->getClassMetadata();
-        if (!str_starts_with($classMetadata->getTableName(), $this->prefix)) {
+        if (! str_starts_with($classMetadata->getTableName(), $this->prefix)) {
             return;
         }
 
-        if ($classMetadata->isRootEntity() && !$classMetadata->namespace) {
+        if ($classMetadata->isRootEntity() && ! $classMetadata->namespace) {
             $classMetadata->name = $this->getNameFromTableName($classMetadata->getTableName());
         }
     }

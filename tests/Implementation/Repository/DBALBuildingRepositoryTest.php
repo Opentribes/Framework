@@ -5,7 +5,6 @@ namespace App\Tests\Implementation\Repository;
 
 use App\Repository\DBALBuildingRepository;
 use Doctrine\ORM\EntityManagerInterface;
-
 use OpenTribes\Core\Entity\Building;
 use OpenTribes\Core\Repository\BuildingRepository;
 use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;

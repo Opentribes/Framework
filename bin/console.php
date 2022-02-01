@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /*
  * This file is part of Sulu.
  *
@@ -15,7 +17,7 @@ use Symfony\Component\Console\Input\ArgvInput;
 use Symfony\Component\Dotenv\Dotenv;
 use Symfony\Component\ErrorHandler\Debug;
 
-if (!\in_array(\PHP_SAPI, ['cli', 'phpdbg', 'embed'], true)) {
+if (! \in_array(\PHP_SAPI, ['cli', 'phpdbg', 'embed'], true)) {
     echo 'Warning: The console should be invoked via the CLI version of PHP, not the ' . \PHP_SAPI . ' SAPI' . \PHP_EOL;
 }
 
@@ -23,7 +25,7 @@ if (!\in_array(\PHP_SAPI, ['cli', 'phpdbg', 'embed'], true)) {
 
 require \dirname(__DIR__) . '/vendor/autoload.php';
 
-if (!\class_exists(Application::class) || !\class_exists(Dotenv::class)) {
+if (! \class_exists(Application::class) || ! \class_exists(Dotenv::class)) {
     throw new LogicException('You need to add "symfony/framework-bundle" and "symfony/dotenv" as Composer dependencies.');
 }
 

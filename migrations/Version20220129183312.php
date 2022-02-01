@@ -17,6 +17,9 @@ final class Version20220129183312 extends AbstractMigration
         return '';
     }
 
+    /**
+     * @phpcsSuppress SlevomatCodingStandard.Functions.UnusedParameter
+     */
     public function up(Schema $schema): void
     {
         $sql = <<<SQL
@@ -27,9 +30,11 @@ ADD `username` VARCHAR(255) DEFAULT '' NOT NULL
 SQL;
 
         $this->addSql($sql);
-
     }
 
+    /**
+     * @phpcsSuppress SlevomatCodingStandard.Functions.UnusedParameter
+     */
     public function down(Schema $schema): void
     {
         $sql = <<<SQL
@@ -39,6 +44,5 @@ DROP COLUMN `location_y`,
 DROP COLUMN `username`
 SQL;
         $this->addSql($sql);
-
     }
 }

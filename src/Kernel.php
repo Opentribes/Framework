@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App;
 
 /*
@@ -18,23 +20,19 @@ use Symfony\Component\Config\Loader\LoaderInterface;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\HttpKernel\HttpKernelInterface;
 
-class Kernel extends SuluKernel implements HttpCacheProvider
+final class Kernel extends SuluKernel implements HttpCacheProvider
 {
     /**
      * @var HttpKernelInterface|null
      */
     private $httpCache;
 
-    protected function configureContainer(ContainerBuilder $container, LoaderInterface $loader)
-    {
-        $container->setParameter('container.dumper.inline_class_loader', true);
-
-        parent::configureContainer($container, $loader);
-    }
-
+    /**
+     * {@inheritdoc}
+     */
     public function getHttpCache()
     {
-        if (!$this->httpCache) {
+        if (! $this->httpCache) {
             $this->httpCache = new SuluHttpCache($this);
             // Activate the following for user based caching see also:
             // https://foshttpcachebundle.readthedocs.io/en/latest/features/user-context.html
@@ -47,5 +45,12 @@ class Kernel extends SuluKernel implements HttpCacheProvider
         }
 
         return $this->httpCache;
+    }
+
+    protected function configureContainer(ContainerBuilder $container, LoaderInterface $loader): void
+    {
+        $container->setParameter('container.dumper.inline_class_loader', true);
+
+        parent::configureContainer($container, $loader);
     }
 }

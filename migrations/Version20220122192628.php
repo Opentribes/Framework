@@ -17,6 +17,9 @@ final class Version20220122192628 extends AbstractMigration
         return '';
     }
 
+    /**
+     * @phpcsSuppress SlevomatCodingStandard.Functions.UnusedParameter
+     */
     public function up(Schema $schema): void
     {
         $sql = <<<SQL
@@ -30,12 +33,15 @@ CREATE TABLE IF NOT EXISTS`ot_buildings` (
 ) ENGINE = InnoDB DEFAULT CHARSET = utf8mb4
 SQL;
 
-       $this->addSql($sql);
+        $this->addSql($sql);
     }
 
+    /**
+     * @phpcsSuppress SlevomatCodingStandard.Functions.UnusedParameter
+     */
     public function down(Schema $schema): void
     {
-      $sql = <<<SQL
+        $sql = <<<SQL
 DROP TABLE IF EXISTS `ot_buildings`
 SQL;
         $this->addSql($sql);
