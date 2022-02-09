@@ -1,20 +1,18 @@
 import {Controller} from '@hotwired/stimulus';
 import * as THREE from 'three'
-
 import {GLTFLoader} from "three/examples/jsm/loaders/GLTFLoader";
-import {Camera} from "three";
+
 
 
 export default class extends Controller {
     connect() {
-        let width = window.innerWidth;
-        let height =window.innerHeight;
+        let width = this.element.clientWidth;
+        let height =this.element.clientHeight;
         let aspectRatio = width/height;
         let loader = new GLTFLoader();
         let renderer = new THREE.WebGLRenderer({alpha: true});
-        let camera:THREE.OrthographicCamera;
+        let camera:THREE.Camera;
         let scene = new THREE.Scene();
-
 
         renderer.setSize(width,height);
         renderer.setPixelRatio(window.devicePixelRatio);
@@ -28,10 +26,9 @@ export default class extends Controller {
                 scene.add(object.scene);
 
                 camera = object.cameras[0];
+                console.log(camera,object);
                 camera.aspect = aspectRatio;
                 camera.updateProjectionMatrix();
-
-                console.log(camera,object);
                 renderer.render(scene, camera);
 
             }, (xhr) => {
