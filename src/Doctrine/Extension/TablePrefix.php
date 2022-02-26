@@ -29,9 +29,6 @@ final class TablePrefix
         $pattern = sprintf('~^%s(.*)~', $this->prefix);
         $className = preg_replace($pattern, '$1', $tableName);
 
-        if (str_ends_with($className, 's')) {
-            $className = substr($className, 0, -1);
-        }
         return ucfirst($className);
     }
 }
