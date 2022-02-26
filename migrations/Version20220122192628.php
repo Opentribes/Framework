@@ -14,7 +14,7 @@ final class Version20220122192628 extends AbstractMigration
 {
     public function getDescription(): string
     {
-        return '';
+        return 'create buildings';
     }
 
     /**

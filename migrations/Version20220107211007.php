@@ -14,7 +14,7 @@ final class Version20220107211007 extends AbstractMigration
 {
     public function getDescription(): string
     {
-        return '';
+        return 'Initial Tables for Sulu CMS';
     }
 
     /**
