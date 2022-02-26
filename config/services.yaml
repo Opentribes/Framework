@@ -39,3 +39,8 @@ services:
         tags:
             - name: 'doctrine.event_listener'
               event: 'loadClassMetadata'
+
+    App\Doctrine\Collection\DoctrineBuildingCollection:
+        decorates: OpenTribes\Core\Entity\BuildingCollection
+
+    OpenTribes\Core\Entity\BuildingCollection: ~

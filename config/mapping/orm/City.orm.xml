@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="utf-8"?>
+<doctrine-mapping xmlns="http://doctrine-project.org/schemas/orm/doctrine-mapping" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://doctrine-project.org/schemas/orm/doctrine-mapping https://www.doctrine-project.org/schemas/orm/doctrine-mapping.xsd">
+  <entity name="OpenTribes\Core\Entity\City" table="ot_city">
+    <indexes>
+      <index name="FK_user" columns="user_id"/>
+    </indexes>
+    <unique-constraints>
+      <unique-constraint name="UNQ_location" columns="location_x,location_y"/>
+    </unique-constraints>
+    <id name="id" type="integer" column="id">
+      <generator strategy="IDENTITY"/>
+    </id>
+    <field name="createdAt" type="datetime" column="created_at">
+      <options>
+        <option name="default">CURRENT_TIMESTAMP</option>
+      </options>
+    </field>
+    <field name="locationX" type="integer" column="location_x">
+      <options>
+        <option name="unsigned"/>
+      </options>
+    </field>
+    <field name="locationY" type="integer" column="location_y">
+      <options>
+        <option name="unsigned"/>
+      </options>
+    </field>
+
+    <many-to-one field="user" target-entity="\Sulu\Bundle\SecurityBundle\Entity\User">
+      <join-columns>
+        <join-column name="user_id"/>
+      </join-columns>
+    </many-to-one>
+  </entity>
+</doctrine-mapping>

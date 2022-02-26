@@ -16,7 +16,7 @@ doctrine:
         mappings:
             App:
                 is_bundle: false
-                type: yml
-                dir: '%kernel.project_dir%/config/doctrine'
+                type: xml
+                dir: '%kernel.project_dir%/config/mapping/orm'
                 prefix: 'OpenTribes\Core\Entity'
                 alias: App
