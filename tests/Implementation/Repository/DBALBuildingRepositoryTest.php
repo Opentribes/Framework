@@ -6,6 +6,7 @@ namespace App\Tests\Implementation\Repository;
 use App\Repository\DBALBuildingRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use OpenTribes\Core\Entity\Building;
+use OpenTribes\Core\Entity\City;
 use OpenTribes\Core\Repository\BuildingRepository;
 use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
 
@@ -35,6 +36,7 @@ final class DBALBuildingRepositoryTest extends KernelTestCase
     public function testBuildingsFound():void{
 
         $collection = $this->repository->findAllAtLocation(10,10);
+
         $this->assertSame(1,$collection->count());
     }
 
@@ -47,19 +49,26 @@ final class DBALBuildingRepositoryTest extends KernelTestCase
         $this->assertTrue($result);
     }
     public function testCanAddBuilding():void{
+
+        $city = $this->entityManager->getRepository(City::class)->findOneBy([
+            'locationX'=>2,
+            'locationY'=>2,
+        ]);
+
         $building = new Building('test',12);
-        $building->setLocationX(2);
-        $building->setLocationY(2);
-        $building->setUsername('test');
+        $building->setCity($city);
+
         $building->setSlot('2');
 
         $this->repository->add($building);
+
         $this->entityManager->flush();
+
         $collection = $this->repository->findAllAtLocation(2,2);
         $this->assertSame(1,$collection->count());
 
-
         $this->entityManager->remove($collection->first());
+
         $this->entityManager->flush();
     }
 
