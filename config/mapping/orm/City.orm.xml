@@ -25,7 +25,9 @@
         <option name="unsigned"/>
       </options>
     </field>
+    <one-to-many field="buildings" target-entity="OpenTribes\Core\Entity\Building" mapped-by="city">
 
+    </one-to-many>
     <many-to-one field="user" target-entity="\Sulu\Bundle\SecurityBundle\Entity\User">
       <join-columns>
         <join-column name="user_id"/>

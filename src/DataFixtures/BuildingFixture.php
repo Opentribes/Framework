@@ -5,11 +5,10 @@ declare(strict_types=1);
 namespace App\DataFixtures;
 
 use Doctrine\Bundle\FixturesBundle\Fixture;
-use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Persistence\ObjectManager;
-use OpenTribes\Core\Entity\Building;
 use OpenTribes\Core\Entity\BuildingCollection;
-use OpenTribes\Core\Entity\City;
+use OpenTribes\Core\Tests\Mock\Entity\City;
+use OpenTribes\Core\Tests\Mock\Entity\MockBuilding;
 use OpenTribes\Core\Utils\Location;
 use Sulu\Bundle\ContactBundle\Entity\Contact;
 use Sulu\Bundle\SecurityBundle\Entity\User;
@@ -38,7 +37,7 @@ final class BuildingFixture extends Fixture
 
 
         $buildingCollection = new BuildingCollection();
-        $building = new Building('test', 10);
+        $building = new MockBuilding('test', 10);
         $building->setSlot('1');
         $buildingCollection[]=$building;
 

@@ -4,42 +4,43 @@ declare(strict_types=1);
 
 namespace App\Repository;
 
-use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\DBAL\Connection;
 use Doctrine\ORM\EntityManagerInterface;
-use Doctrine\ORM\EntityRepository;
-use Doctrine\ORM\Query\Parameter;
-use OpenTribes\Core\Entity\Building;
 use OpenTribes\Core\Entity\BuildingCollection;
-use OpenTribes\Core\Entity\City;
 use OpenTribes\Core\Repository\BuildingRepository;
-use Sulu\Bundle\SecurityBundle\Entity\User;
+use OpenTribes\Core\Tests\Mock\Entity\MockBuilding;
 
 final class DBALBuildingRepository implements BuildingRepository
 {
-    private EntityRepository $repository;
-    private EntityRepository $cityRepository;
 
-    public function __construct(private EntityManagerInterface $entityManager)
-    {
-        $this->repository = $entityManager->getRepository(Building::class);
-        $this->cityRepository = $entityManager->getRepository(City::class);
+
+    public function __construct(
+        private Connection $connection,
+        private EntityManagerInterface $entityManager
+    ) {
+
     }
 
-    public function findAllAtLocation(int $locationX, int $locationY):BuildingCollection
+    public function findAllAtLocation(int $locationX, int $locationY): BuildingCollection
     {
-        $queryBuilder = $this->entityManager->createQueryBuilder();
-        $query = $queryBuilder->select('building')
-            ->from(Building::class,'building')
-            ->innerJoin('building.city','city')
-            ->where('city.locationX = :locationX AND city.locationY = :locationY')
-            ->setParameters(new ArrayCollection(
-                [
-                    new Parameter(':locationX',$locationX),
-                    new Parameter(':locationY',$locationX),
-                ]
-            ))->getQuery();
+        $queryBuilder = $this->connection->createQueryBuilder();
 
-        $buildings = $query->getResult();
+        $query = $queryBuilder->select('b.id,b.created_at,slot,level,status')
+            ->from('ot_building', 'b')
+            ->innerJoin('b', 'ot_city', 'c', $queryBuilder->expr()->eq('b.city_id', 'c.id'))
+            ->where('c.location_x = :locationX AND c.location_y = :locationY')
+            ->setParameters(
+                [
+                    'locationX' => $locationX,
+                    'locationY' => $locationY,
+                ]
+            );
+        $result = $query->executeQuery();
+
+        while ($row = $result->fetchAssociative()) {
+            dump($row);
+        }
+        $buildings = [];
         return new BuildingCollection($buildings);
     }
 
@@ -50,23 +51,21 @@ final class DBALBuildingRepository implements BuildingRepository
 
     public function userCanBuildAtLocation(int $locationX, int $locationY, string $username): bool
     {
-        $queryBuilder = $this->entityManager->createQueryBuilder();
-        $query = $queryBuilder->select('COUNT(city.id)')
-            ->from(City::class,'city')
-            ->innerJoin('city.user','user')
-            ->where('city.locationX = :locationX AND city.locationY = :locationY AND user.username = :username')
-            ->setParameters(new ArrayCollection(
-                [
-                    new Parameter(':locationX',$locationX),
-                    new Parameter(':locationY',$locationX),
-                    new Parameter(':username',$username)
-                ]
-            ))->getQuery();
-        return $query->getSingleScalarResult() > 0;
-
+        $queryBuilder = $this->connection->createQueryBuilder();
+        $query = $queryBuilder->select('COUNT(c.id)')
+            ->from('ot_city','c')
+            ->innerJoin('c','se_users','u',$queryBuilder->expr()->eq('c.user_id','u.id'))
+            ->where('c.location_x = :locationX AND c.location_y = :locationY AND u.username = :username')
+            ->setParameters([
+               'locationX'=>$locationX,
+               'locationY'=>$locationY,
+               'username'=>$username
+            ]);
+        $result = $query->executeQuery();
+        return $result->fetchFirstColumn() > 0;
     }
 
-    public function add(Building $building): void
+    public function add(MockBuilding $building): void
     {
         $this->entityManager->persist($building);
     }

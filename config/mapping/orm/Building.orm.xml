@@ -26,6 +26,11 @@
         <option name="default">1</option>
       </options>
     </field>
+    <field name="cityId" type="integer" column="city_id">
+      <options>
+        <option name="unsigned"/>
+      </options>
+    </field>
     <field name="status" type="BuildStatus" column="status" length="0">
       <options>
         <option name="fixed"/>
