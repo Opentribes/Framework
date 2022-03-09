@@ -4,14 +4,15 @@ declare(strict_types=1);
 
 namespace App\DataFixtures;
 
+use App\Entity\City;
+use App\Entity\User;
 use Doctrine\Bundle\FixturesBundle\Fixture;
 use Doctrine\Persistence\ObjectManager;
 use OpenTribes\Core\Entity\BuildingCollection;
-use OpenTribes\Core\Tests\Mock\Entity\City;
 use OpenTribes\Core\Tests\Mock\Entity\MockBuilding;
 use OpenTribes\Core\Utils\Location;
 use Sulu\Bundle\ContactBundle\Entity\Contact;
-use Sulu\Bundle\SecurityBundle\Entity\User;
+
 
 final class BuildingFixture extends Fixture
 {

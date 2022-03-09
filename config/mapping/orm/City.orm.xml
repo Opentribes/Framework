@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <doctrine-mapping xmlns="http://doctrine-project.org/schemas/orm/doctrine-mapping" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://doctrine-project.org/schemas/orm/doctrine-mapping https://www.doctrine-project.org/schemas/orm/doctrine-mapping.xsd">
-  <entity name="OpenTribes\Core\Entity\City" table="ot_city">
+  <entity name="App\Entity\City" table="ot_city">
     <indexes>
       <index name="FK_user" columns="user_id"/>
     </indexes>
@@ -25,10 +25,10 @@
         <option name="unsigned"/>
       </options>
     </field>
-    <one-to-many field="buildings" target-entity="OpenTribes\Core\Entity\Building" mapped-by="city">
+    <one-to-many field="buildings" target-entity="App\Entity\Building" mapped-by="city">
 
     </one-to-many>
-    <many-to-one field="user" target-entity="\Sulu\Bundle\SecurityBundle\Entity\User">
+    <many-to-one field="user" target-entity="App\Entity\User">
       <join-columns>
         <join-column name="user_id"/>
       </join-columns>

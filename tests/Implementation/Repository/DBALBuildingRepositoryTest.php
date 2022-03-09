@@ -3,11 +3,11 @@ declare(strict_types=1);
 
 namespace App\Tests\Implementation\Repository;
 
+use App\Entity\Building;
+use App\Entity\City;
 use App\Repository\DBALBuildingRepository;
 use Doctrine\ORM\EntityManagerInterface;
-use OpenTribes\Core\Tests\Mock\Entity\MockCity;
 use OpenTribes\Core\Repository\BuildingRepository;
-use OpenTribes\Core\Tests\Mock\Entity\MockBuilding;
 use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
 
 /**
@@ -50,12 +50,12 @@ final class DBALBuildingRepositoryTest extends KernelTestCase
     }
     public function testCanAddBuilding():void{
 
-        $city = $this->entityManager->getRepository(MockCity::class)->findOneBy([
+        $city = $this->entityManager->getRepository(City::class)->findOneBy([
             'locationX'=>2,
             'locationY'=>2,
         ]);
 
-        $building = new MockBuilding('test',12);
+        $building = new Building('test',12);
         $building->setCity($city);
 
         $building->setSlot('2');
