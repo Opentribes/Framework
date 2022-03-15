@@ -33,21 +33,21 @@ class City implements CityInterface
     #[Column(type: "integer")]
     private int $id;
 
-    #[Column(type: "integer")]
+    #[Column(name:"user_id",type: "integer")]
     private int $userId;
 
-    #[Column(type: "integer")]
+    #[Column(name:"location_x", type: "integer")]
     private int $locationX;
-    #[Column(type: "integer")]
+    #[Column(name:"location_y", type: "integer")]
     private int $locationY;
 
-    #[Column(type: "datetime", options: ["default"=>"CURRENT_TIMESTAMP"])]
+    #[Column(name:"created_at", type: "datetime", options: ["default"=>"CURRENT_TIMESTAMP"])]
     private DateTimeInterface $createdAt;
 
     #[ManyToOne(targetEntity: "User")]
-    #[JoinColumn(name: "user_id")]
+    #[JoinColumn(name: "user_id",referencedColumnName: "id")]
     private User $user;
-    #[OneToMany(mappedBy: "city",targetEntity: "Building")]
+    #[OneToMany(mappedBy: "city",targetEntity: "Building",orphanRemoval: true)]
     private Collection $buildings;
 
     public function __construct(Location $location)

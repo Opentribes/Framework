@@ -29,16 +29,16 @@ class Building implements BuildingInterface
     #[Column(type: "integer")]
     private int $id;
 
-    #[Column(type: "integer", options: ["unsigned"])]
+    #[Column(name:"city_id", type: "integer", options: ["unsigned"])]
     private int $cityId;
 
     #[Column(type: "string",length: 255,options: ["fixed"])]
     private string $slot = '';
     #[Column(type: "integer",options: ["unsigned","default"=>1])]
     private int $level = 0;
-    #[Column(type: "datetime", options: ["default"=>"CURRENT_TIMESTAMP"])]
+    #[Column(name:"created_at", type: "datetime", options: ["default"=>"CURRENT_TIMESTAMP"])]
     private DateTimeInterface $createdAt;
-    #[ManyToOne(targetEntity: "City", cascade: ["all"],fetch: "EAGER")]
+    #[ManyToOne(targetEntity: "City")]
     #[JoinColumn(name: "city_id",referencedColumnName: "id")]
     private City $city;
 
