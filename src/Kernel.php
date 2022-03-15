@@ -20,7 +20,7 @@ use Symfony\Component\Config\Loader\LoaderInterface;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\HttpKernel\HttpKernelInterface;
 
-final class Kernel extends SuluKernel implements HttpCacheProvider
+class Kernel extends SuluKernel implements HttpCacheProvider
 {
     /**
      * @var HttpKernelInterface|null

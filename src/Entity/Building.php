@@ -4,17 +4,45 @@ declare(strict_types=1);
 namespace App\Entity;
 
 use DateTimeInterface;
+use Doctrine\ORM\Mapping\Column;
+use Doctrine\ORM\Mapping\Entity;
+use Doctrine\ORM\Mapping\GeneratedValue;
+use Doctrine\ORM\Mapping\Id;
+use Doctrine\ORM\Mapping\Index;
+use Doctrine\ORM\Mapping\JoinColumn;
+use Doctrine\ORM\Mapping\ManyToOne;
+use Doctrine\ORM\Mapping\Table;
+use Doctrine\ORM\Mapping\UniqueConstraint;
 use OpenTribes\Core\Entity\Building as BuildingInterface;
 use OpenTribes\Core\Enum\BuildStatus;
 use OpenTribes\Core\Entity\City as CityInterface;
+
+#[Entity]
+#[UniqueConstraint("UNQ_clot_in_city",columns: ["slot","city_id"])]
+#[Index(name: "FK_city", columns: ["city_id"])]
+#[Table(name: "ot_building")]
 class Building implements BuildingInterface
 {
-    private int $cityId;
+
+    #[Id]
+    #[GeneratedValue(strategy: "IDENTITY")]
+    #[Column(type: "integer")]
     private int $id;
+
+    #[Column(type: "integer", options: ["unsigned"])]
+    private int $cityId;
+
+    #[Column(type: "string",length: 255,options: ["fixed"])]
     private string $slot = '';
+    #[Column(type: "integer",options: ["unsigned","default"=>1])]
     private int $level = 0;
+    #[Column(type: "datetime", options: ["default"=>"CURRENT_TIMESTAMP"])]
     private DateTimeInterface $createdAt;
+    #[ManyToOne(targetEntity: "City", cascade: ["all"],fetch: "EAGER")]
+    #[JoinColumn(name: "city_id",referencedColumnName: "id")]
     private City $city;
+
+    #[Column(type: "string",enumType:"OpenTribes\Core\Enum\BuildStatus",options: ["default"=>"default"])]
     private BuildStatus $status;
 
 
