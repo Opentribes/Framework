@@ -32,7 +32,7 @@ class Building implements BuildingInterface
     private int $level = 0;
     #[Mapping\Column(name:"created_at", type: "datetime", options: ["default"=>"CURRENT_TIMESTAMP"])]
     private DateTimeInterface $createdAt;
-    #[Mapping\ManyToOne(targetEntity: "City")]
+    #[Mapping\ManyToOne(targetEntity: "City",inversedBy: "buildings")]
     #[Mapping\JoinColumn(name: "city_id",referencedColumnName: "id")]
     private City $city;
 

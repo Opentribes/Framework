@@ -16,22 +16,29 @@ use Sulu\Bundle\ContactBundle\Entity\Contact;
 
 final class BuildingFixture extends Fixture
 {
+    private ObjectManager $manager;
+    private function createUser(string $username):User
+    {
+        $userContact = new Contact();
+        $userContact->setFirstName($username);
+        $userContact->setLastName($username);
+        $userContact->setMainEmail($username.'@local.test');
+        $this->manager->persist($userContact);
+        $user = new User();
+        $user->setUsername($username);
+        $user->setPassword($username);
+        $user->setLocale('de');
+        $user->setSalt($username);
+        $user->setContact($userContact);
+        $this->manager->persist($user);
+        return $user;
+    }
     public function load(ObjectManager $manager): void
     {
+        $this->manager = $manager;
+        $user = $this->createUser('test_without');
 
-        $userContact = new Contact();
-        $userContact->setFirstName('Test');
-        $userContact->setLastName('Test');
-        $userContact->setMainEmail('foo@bar.test');
-        $manager->persist($userContact);
-        $user = new User();
-        $user->setUsername('test');
-        $user->setPassword('test');
-        $user->setLocale('de');
-        $user->setSalt('test');
-        $user->setContact($userContact);
-        $manager->persist($user);
-
+        $user = $this->createUser('test');
         $city = new City(new Location(10,10));
         $city->setUser($user);
         $manager->persist($city);

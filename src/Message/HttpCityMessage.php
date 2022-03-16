@@ -15,7 +15,7 @@ final class HttpCityMessage implements DisplayBuildingSlotsMessage
     public SlotViewCollection $slots;
 
     public bool $cityDataOnly;
-    public function __construct(private Request $request,private UserInterface $user){
+    public function __construct(private Request $request){
         $this->slots = new SlotViewCollection();
         $this->cityDataOnly = false;
     }
@@ -41,7 +41,7 @@ final class HttpCityMessage implements DisplayBuildingSlotsMessage
 
     public function getUserName(): string
     {
-        return $this->user->getUsername();
+        return $this->request->getSession()->getBag('attributes')->get('_security.last_username');
     }
 
     public function enableCityDataOnly(): void

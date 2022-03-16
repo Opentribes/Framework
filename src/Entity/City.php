@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace App\Entity;
 
+use App\Repository\DBALCityRepository;
 use DateTimeInterface;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
@@ -11,10 +12,9 @@ use Doctrine\ORM\Mapping;
 use OpenTribes\Core\Entity\BuildingCollection;
 use OpenTribes\Core\Entity\City as CityInterface;
 use OpenTribes\Core\Entity\User;
-
 use OpenTribes\Core\Utils\Location;
 
-#[Mapping\Entity]
+#[Mapping\Entity(repositoryClass: DBALCityRepository::class)]
 #[Mapping\UniqueConstraint("UNQ_location", columns: ["location_x", "location_y"])]
 #[Mapping\Index(columns: ["user_id"], name: "FK_user")]
 #[Mapping\Table(name: "ot_city")]
