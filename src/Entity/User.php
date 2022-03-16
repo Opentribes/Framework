@@ -8,11 +8,12 @@ use Doctrine\ORM\Mapping\Entity;
 use Doctrine\ORM\Mapping\OneToMany;
 use Doctrine\ORM\Mapping\Table;
 use OpenTribes\Core\Entity\User as UserInterface;
+use Sulu\Bundle\SecurityBundle\Entity\User as SuluUser;
 
 
 #[Entity]
 #[Table(name: "se_users")]
-class User extends \Sulu\Bundle\SecurityBundle\Entity\User implements UserInterface
+class User extends SuluUser implements UserInterface
 {
     #[OneToMany(mappedBy: "user",targetEntity: "City")]
     private Collection $cities;
@@ -29,8 +30,5 @@ class User extends \Sulu\Bundle\SecurityBundle\Entity\User implements UserInterf
     {
         return $this->cities;
     }
-
-
-
 
 }

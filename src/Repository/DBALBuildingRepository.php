@@ -6,37 +6,34 @@ namespace App\Repository;
 
 
 use App\Entity\Building;
-use App\Entity\City;
+use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
+use Doctrine\DBAL\Types\Types;
+use Doctrine\Persistence\ManagerRegistry;
 use OpenTribes\Core\Entity\Building as BuildingInterface;
-use Doctrine\ORM\EntityManagerInterface;
-use Doctrine\ORM\EntityRepository;
-
 use OpenTribes\Core\Entity\BuildingCollection;
-
 use OpenTribes\Core\Repository\BuildingRepository;
 
-final class DBALBuildingRepository implements BuildingRepository
+final class DBALBuildingRepository extends ServiceEntityRepository implements BuildingRepository
 {
 
-    private EntityRepository $buildingRepository;
-    private EntityRepository $cityRepository;
     public function __construct(
-        private EntityManagerInterface $entityManager
+        protected ManagerRegistry $registry
     ) {
-        $this->buildingRepository = $this->entityManager->getRepository(Building::class);
-        $this->cityRepository = $this->entityManager->getRepository(City::class);
+        parent::__construct($registry, Building::class);
     }
 
     public function findAllAtLocation(int $locationX, int $locationY): BuildingCollection
     {
-        $cityAtLocation = $this->cityRepository->findOneBy([
-                'locationX'=>$locationX,
-                'locationY'=>$locationY,
-        ]);
-        if(!$cityAtLocation){
-            return new BuildingCollection([]);
-        }
-        return $cityAtLocation->getBuildings();
+        $qb = $this->createQueryBuilder('b');
+        $qb->select('b')
+            ->join('b.city', 'c')
+            ->where(
+                $qb->expr()->eq('c.locationX', ':locationX'),
+                $qb->expr()->eq('c.locationY', ':locationY'),
+            )
+            ->setParameter('locationX', $locationX, Types::INTEGER)
+            ->setParameter('locationY', $locationY, Types::INTEGER);
+        return new BuildingCollection($qb->getQuery()->getResult());
     }
 
     public function findAvailable(): BuildingCollection
@@ -46,21 +43,25 @@ final class DBALBuildingRepository implements BuildingRepository
 
     public function userCanBuildAtLocation(int $locationX, int $locationY, string $username): bool
     {
-        $cityAtLocation = $this->cityRepository->findOneBy([
-            [
-                'locationX'=>$locationX,
-                'locationY'=>$locationY,
-                'user'=>[
-                    'username'=>$username
-                ]
-            ]
-        ]);
-        return $cityAtLocation !== null;
+        $qb = $this->createQueryBuilder('b');
+        $qb->select('COUNT(c.id)')
+            ->join('b.city', 'c')
+            ->join('c.user', 'u')
+            ->where(
+                $qb->expr()->eq('c.locationX', ':locationX'),
+                $qb->expr()->eq('c.locationY', ':locationY'),
+                $qb->expr()->eq('u.username', ':username'),
+            )
+            ->setParameter('locationX', $locationX, Types::INTEGER)
+            ->setParameter('locationY', $locationY, Types::INTEGER)
+            ->setParameter('username', $username, Types::STRING);
+
+        return $qb->getQuery()->getSingleScalarResult() !== 0;
     }
 
     public function add(BuildingInterface $building): void
     {
-        $this->entityManager->persist($building);
+        $this->_em->persist($building);
     }
 
 }
