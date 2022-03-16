@@ -7,19 +7,20 @@ namespace App\Entity;
 use DateTimeInterface;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
-use Doctrine\ORM\Mapping\Column;
-use Doctrine\ORM\Mapping\Entity;
-use Doctrine\ORM\Mapping\GeneratedValue;
-use Doctrine\ORM\Mapping\Id;
-use Doctrine\ORM\Mapping\Index;
-use Doctrine\ORM\Mapping\JoinColumn;
-use Doctrine\ORM\Mapping\ManyToOne;
-use Doctrine\ORM\Mapping\OneToMany;
-use Doctrine\ORM\Mapping\Table;
-use Doctrine\ORM\Mapping\UniqueConstraint;
+use Doctrine\ORM\Mapping\{Column,
+    Entity,
+    GeneratedValue,
+    Id,
+    Index,
+    JoinColumn,
+    ManyToOne,
+    OneToMany,
+    Table,
+    UniqueConstraint};
 use OpenTribes\Core\Entity\BuildingCollection;
 use OpenTribes\Core\Entity\City as CityInterface;
 use OpenTribes\Core\Entity\User;
+
 use OpenTribes\Core\Utils\Location;
 
 #[Entity]
@@ -44,9 +45,10 @@ class City implements CityInterface
     #[Column(name:"created_at", type: "datetime", options: ["default"=>"CURRENT_TIMESTAMP"])]
     private DateTimeInterface $createdAt;
 
-    #[ManyToOne(targetEntity: "User")]
-    #[JoinColumn(name: "user_id",referencedColumnName: "id")]
+    #[ManyToOne(targetEntity: "User", inversedBy: "cities")]
+    #[JoinColumn(name: "user_id", referencedColumnName: "id")]
     private User $user;
+
     #[OneToMany(mappedBy: "city",targetEntity: "Building",orphanRemoval: true)]
     private Collection $buildings;
 
