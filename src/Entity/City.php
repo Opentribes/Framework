@@ -7,49 +7,40 @@ namespace App\Entity;
 use DateTimeInterface;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
-use Doctrine\ORM\Mapping\{Column,
-    Entity,
-    GeneratedValue,
-    Id,
-    Index,
-    JoinColumn,
-    ManyToOne,
-    OneToMany,
-    Table,
-    UniqueConstraint};
+use Doctrine\ORM\Mapping;
 use OpenTribes\Core\Entity\BuildingCollection;
 use OpenTribes\Core\Entity\City as CityInterface;
 use OpenTribes\Core\Entity\User;
 
 use OpenTribes\Core\Utils\Location;
 
-#[Entity]
-#[UniqueConstraint("UNQ_location",columns: ["location_x","location_y"])]
-#[Index(name: "FK_usery", columns: ["user_id"])]
-#[Table(name: "ot_city")]
+#[Mapping\Entity]
+#[Mapping\UniqueConstraint("UNQ_location", columns: ["location_x", "location_y"])]
+#[Mapping\Index(columns: ["user_id"], name: "FK_usery")]
+#[Mapping\Table(name: "ot_city")]
 class City implements CityInterface
 {
-    #[Id]
-    #[GeneratedValue(strategy: "IDENTITY")]
-    #[Column(type: "integer")]
+    #[Mapping\Id]
+    #[Mapping\GeneratedValue(strategy: "IDENTITY")]
+    #[Mapping\Column(type: "integer")]
     private int $id;
 
-    #[Column(name:"user_id",type: "integer")]
+    #[Mapping\Column(name: "user_id", type: "integer")]
     private int $userId;
 
-    #[Column(name:"location_x", type: "integer")]
+    #[Mapping\Column(name: "location_x", type: "integer")]
     private int $locationX;
-    #[Column(name:"location_y", type: "integer")]
+    #[Mapping\Column(name: "location_y", type: "integer")]
     private int $locationY;
 
-    #[Column(name:"created_at", type: "datetime", options: ["default"=>"CURRENT_TIMESTAMP"])]
+    #[Mapping\Column(name: "created_at", type: "datetime", options: ["default" => "CURRENT_TIMESTAMP"])]
     private DateTimeInterface $createdAt;
 
-    #[ManyToOne(targetEntity: "User", inversedBy: "cities")]
-    #[JoinColumn(name: "user_id", referencedColumnName: "id")]
+    #[Mapping\ManyToOne(targetEntity: "User", inversedBy: "cities")]
+    #[Mapping\JoinColumn(name: "user_id", referencedColumnName: "id")]
     private User $user;
 
-    #[OneToMany(mappedBy: "city",targetEntity: "Building",orphanRemoval: true)]
+    #[Mapping\OneToMany(mappedBy: "city", targetEntity: "Building", orphanRemoval: true)]
     private Collection $buildings;
 
     public function __construct(Location $location)
@@ -60,7 +51,7 @@ class City implements CityInterface
 
     public function getLocation(): Location
     {
-        return new Location($this->locationX,$this->locationY);
+        return new Location($this->locationX, $this->locationY);
     }
 
     public function setLocation(Location $location): void
@@ -77,7 +68,7 @@ class City implements CityInterface
     public function setBuildings(BuildingCollection $buildings): void
     {
         /** @var Building $building */
-        foreach($buildings as $building) {
+        foreach ($buildings as $building) {
             $building->setCity($this);
         }
         $this->buildings = new ArrayCollection($buildings->getElements());

@@ -5,38 +5,38 @@ namespace App\Entity;
 
 use App\Repository\DBALBuildingRepository;
 use DateTimeInterface;
-use Doctrine\ORM\Mapping\{Column, Entity, GeneratedValue, Id, Index, JoinColumn, ManyToOne, Table, UniqueConstraint};
+use Doctrine\ORM\Mapping;
 use OpenTribes\Core\Entity\Building as BuildingInterface;
 use OpenTribes\Core\Enum\BuildStatus;
 use OpenTribes\Core\Entity\City as CityInterface;
 
 
-#[Entity(repositoryClass: DBALBuildingRepository::class)]
-#[UniqueConstraint("UNQ_clot_in_city",columns: ["slot","city_id"])]
-#[Index(name: "FK_city", columns: ["city_id"])]
-#[Table(name: "ot_building")]
+#[Mapping\Entity(repositoryClass: DBALBuildingRepository::class)]
+#[Mapping\UniqueConstraint("UNQ_clot_in_city",columns: ["slot","city_id"])]
+#[Mapping\Index(columns: ["city_id"],name: "FK_city")]
+#[Mapping\Table(name: "ot_building")]
 class Building implements BuildingInterface
 {
 
-    #[Id]
-    #[GeneratedValue(strategy: "IDENTITY")]
-    #[Column(type: "integer")]
+    #[Mapping\Id]
+    #[Mapping\GeneratedValue(strategy: "IDENTITY")]
+    #[Mapping\Column(type: "integer")]
     private int $id;
 
-    #[Column(name:"city_id", type: "integer", options: ["unsigned"])]
+    #[Mapping\Column(name:"city_id", type: "integer", options: ["unsigned"])]
     private int $cityId;
 
-    #[Column(type: "string",length: 255,options: ["fixed"])]
+    #[Mapping\Column(type: "string",length: 255,options: ["fixed"])]
     private string $slot = '';
-    #[Column(type: "integer",options: ["unsigned","default"=>1])]
+    #[Mapping\Column(type: "integer",options: ["unsigned","default"=>1])]
     private int $level = 0;
-    #[Column(name:"created_at", type: "datetime", options: ["default"=>"CURRENT_TIMESTAMP"])]
+    #[Mapping\Column(name:"created_at", type: "datetime", options: ["default"=>"CURRENT_TIMESTAMP"])]
     private DateTimeInterface $createdAt;
-    #[ManyToOne(targetEntity: "City")]
-    #[JoinColumn(name: "city_id",referencedColumnName: "id")]
+    #[Mapping\ManyToOne(targetEntity: "City")]
+    #[Mapping\JoinColumn(name: "city_id",referencedColumnName: "id")]
     private City $city;
 
-    #[Column(type: "string",enumType:"OpenTribes\Core\Enum\BuildStatus",options: ["default"=>"default"])]
+    #[Mapping\Column(type: "string",enumType:"OpenTribes\Core\Enum\BuildStatus",options: ["default"=>"default"])]
     private BuildStatus $status;
 
 
