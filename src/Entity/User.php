@@ -4,18 +4,16 @@ declare(strict_types=1);
 namespace App\Entity;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
-use Doctrine\ORM\Mapping\Entity;
-use Doctrine\ORM\Mapping\OneToMany;
-use Doctrine\ORM\Mapping\Table;
+use Doctrine\ORM\Mapping;
 use OpenTribes\Core\Entity\User as UserInterface;
 use Sulu\Bundle\SecurityBundle\Entity\User as SuluUser;
 
 
-#[Entity]
-#[Table(name: "se_users")]
+#[Mapping\Entity]
+#[Mapping\Table(name: "se_users")]
 class User extends SuluUser implements UserInterface
 {
-    #[OneToMany(mappedBy: "user",targetEntity: "City")]
+    #[Mapping\OneToMany(mappedBy: "user",targetEntity: "City")]
     private Collection $cities;
 
 
