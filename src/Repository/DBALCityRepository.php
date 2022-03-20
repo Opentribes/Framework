@@ -35,9 +35,10 @@ final class DBALCityRepository extends ServiceEntityRepository implements CityRe
         return $qb->getQuery()->getSingleScalarResult();
     }
 
-    public function add(CityInterface $city): void
+    public function add(CityInterface $city): bool
     {
         $this->_em->persist($city);
+        return true;
     }
 
     public function countAtLocation(Location $location): int
@@ -64,12 +65,13 @@ final class DBALCityRepository extends ServiceEntityRepository implements CityRe
             ->setParameter('locationX', $location->getX(), Types::INTEGER)
             ->setParameter('locationY', $location->getY(), Types::INTEGER);
         $query = $qb->getQuery();
-        try{
-           return $query->getSingleResult();
-        }catch (NoResultException $exception){
-            throw new CityNotFoundAtLocationException(sprintf("City not found at location %d/%d",$location->getY(),$location->getX()));
+        try {
+            return $query->getSingleResult();
+        } catch (NoResultException $exception) {
+            throw new CityNotFoundAtLocationException(
+                sprintf("City not found at location %d/%d", $location->getY(), $location->getX())
+            );
         }
-
     }
 
 }
