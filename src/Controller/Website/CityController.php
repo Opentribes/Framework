@@ -17,7 +17,7 @@ use Symfony\Component\Routing\Annotation\Route;
 #[IsGranted('IS_AUTHENTICATED_FULLY')]
 final class CityController extends AbstractController
 {
-    public function __construct(private DisplayBuildingSlots $displayBuildingSlots, private DBALCityRepository $repository)
+    public function __construct(private DisplayBuildingSlots $displayBuildingSlots)
     {
     }
 
@@ -28,8 +28,6 @@ final class CityController extends AbstractController
 
         $this->displayBuildingSlots->execute($message);
 
-        $building = $this->repository->countByUsername('test');
-        dump($building);
         return $this->render(
             'pages/city.html.twig',
             ['slots' => $message->slots, 'cityDataOnly' => $message->cityDataOnly]

@@ -36,3 +36,15 @@ services:
     # please note that last definitions always *replace* previous ones
     OpenTribes\Core\UseCase\DisplayBuildingSlots:
         arguments: ['@App\Repository\DBALBuildingRepository']
+
+    OpenTribes\Core\UseCase\CheckPlayerHasCity:
+        arguments: ['@App\Repository\DBALCityRepository']
+
+    OpenTribes\Core\UseCase\CreateNewCityUseCase:
+        arguments: [
+            '@App\Repository\DBALCityRepository',
+            '@OpenTribes\Core\Service\SimpleLocationFinder'
+        ]
+
+    OpenTribes\Core\Service\SimpleLocationFinder:
+        arguments: ['@App\Repository\DBALCityRepository','10']

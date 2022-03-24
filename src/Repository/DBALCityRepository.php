@@ -54,6 +54,12 @@ final class DBALCityRepository extends ServiceEntityRepository implements CityRe
         return $qb->getQuery()->getSingleScalarResult();
     }
 
+    public function create(Location $location): CityInterface
+    {
+        return  new City($location);
+    }
+
+
     public function findAtLocation(Location $location): CityInterface
     {
         $qb = $this->createQueryBuilder('c');
@@ -73,5 +79,12 @@ final class DBALCityRepository extends ServiceEntityRepository implements CityRe
             );
         }
     }
+
+
+    public function __destruct()
+    {
+        $this->_em->flush();
+    }
+
 
 }
