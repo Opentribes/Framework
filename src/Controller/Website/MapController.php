@@ -4,7 +4,7 @@ declare(strict_types=1);
 namespace App\Controller\Website;
 use App\Message\HttpMapMessage;
 use OpenTribes\Core\UseCase\CheckPlayerHasCity;
-use OpenTribes\Core\UseCase\CreateNewCityUseCase;
+use OpenTribes\Core\UseCase\CreateFirstCityUseCase;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
 use Sulu\Bundle\CommunityBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
@@ -16,7 +16,7 @@ final class MapController extends AbstractController
 {
     public function __construct(
         private CheckPlayerHasCity $checkPlayerHasCity,
-        private CreateNewCityUseCase $createNewCityUseCase
+        private CreateFirstCityUseCase $createNewCityUseCase
     ){
 
     }
