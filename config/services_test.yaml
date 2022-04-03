@@ -1,0 +1,6 @@
+
+services:
+
+    dbal.user.repository:
+        alias: App\Repository\DBALUserRepository
+        public: true

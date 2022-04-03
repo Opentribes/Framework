@@ -50,6 +50,5 @@ services:
         arguments: ['@App\Repository\DBALCityRepository','10']
 
     App\Repository\DBALUserRepository:
-        public: true
         arguments: ['App\Entity\User']
         factory: [ '@doctrine.orm.default_entity_manager','getRepository' ]
