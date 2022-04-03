@@ -1,19 +1,24 @@
 <?php
+
 declare(strict_types=1);
 
 namespace App\Entity;
+
+
+use App\Repository\DBALUserRepository;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
-use Doctrine\ORM\Mapping;
+use Doctrine\ORM\Mapping as ORM;
+use OpenTribes\Core\Entity\CityCollection;
 use OpenTribes\Core\Entity\User as UserInterface;
 use Sulu\Bundle\SecurityBundle\Entity\User as SuluUser;
 
 
-#[Mapping\Entity]
-#[Mapping\Table(name: "se_users")]
+#[ORM\Entity(repositoryClass: DBALUserRepository::class)]
+#[ORM\Table(name: "se_users")]
 class User extends SuluUser implements UserInterface
 {
-    #[Mapping\OneToMany(mappedBy: "user",targetEntity: "City")]
+    #[ORM\OneToMany(mappedBy: "user", targetEntity: City::class)]
     private Collection $cities;
 
 
@@ -24,9 +29,14 @@ class User extends SuluUser implements UserInterface
     }
 
 
-    public function getCities(): ArrayCollection|Collection
+    public function getCities(): CityCollection
     {
-        return $this->cities;
+        return new CityCollection($this->cities->toArray());
+    }
+
+    public function getUsername():string
+    {
+        return $this->username;
     }
 
 }

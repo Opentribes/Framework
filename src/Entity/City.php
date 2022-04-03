@@ -36,11 +36,11 @@ class City implements CityInterface
     #[Mapping\Column(name: "created_at", type: "datetime", options: ["default" => "CURRENT_TIMESTAMP"])]
     private DateTimeInterface $createdAt;
 
-    #[Mapping\ManyToOne(targetEntity: "User", inversedBy: "cities")]
+    #[Mapping\ManyToOne(targetEntity: \App\Entity\User::class, inversedBy: "cities")]
     #[Mapping\JoinColumn(name: "user_id", referencedColumnName: "id")]
     private User $user;
 
-    #[Mapping\OneToMany(mappedBy: "city", targetEntity: "Building", orphanRemoval: true)]
+    #[Mapping\OneToMany(mappedBy: "city", targetEntity: Building::class, orphanRemoval: true)]
     private Collection $buildings;
 
     public function __construct(Location $location)

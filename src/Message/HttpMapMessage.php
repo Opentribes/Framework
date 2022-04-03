@@ -4,12 +4,11 @@ declare(strict_types=1);
 
 namespace App\Message;
 
-use OpenTribes\Core\Message\CheckPlayerHasCityMessage;
 use OpenTribes\Core\Message\CreateFirstCityMessage;
 use OpenTribes\Core\View\CityView;
 use Symfony\Component\HttpFoundation\Request;
 
-final class HttpMapMessage implements CheckPlayerHasCityMessage, CreateFirstCityMessage
+final class HttpMapMessage implements CreateFirstCityMessage
 {
     public CityView $city;
     private bool $cityCreated = false;

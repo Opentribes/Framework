@@ -6,8 +6,6 @@ namespace App\Tests\Implementation\Repository;
 use App\Entity\City;
 use App\Repository\Exception\CityNotFoundAtLocationException;
 use App\Repository\DBALCityRepository;
-use Doctrine\ORM\EntityManagerInterface;
-use OpenTribes\Core\Repository\CityRepository;
 use OpenTribes\Core\Utils\Location;
 use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
 
@@ -16,15 +14,13 @@ use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
  */
 final class DBALCityRepositoryTest extends KernelTestCase
 {
-    private CityRepository $repository;
-    private EntityManagerInterface $entityManager;
+    private DBALCityRepository $repository;
+
 
     public function setUp(): void
     {
         $container = $this->getContainer();
-        /** @var DBALCityRepository $repository */
         $this->repository = $container->get(DBALCityRepository::class);
-        $this->entityManager = $container->get(EntityManagerInterface::class);
     }
 
     public function testUserHasNoCities(): void
@@ -33,7 +29,10 @@ final class DBALCityRepositoryTest extends KernelTestCase
 
         $this->assertSame(0,$actualCounter);
     }
-
+    public function testCanCreateCity():void{
+        $city = $this->repository->create(new Location(2,2));
+        $this->assertNotNull($city);
+    }
     public function testUserHasACity(): void
     {
         $actualCounter = $this->repository->countByUsername('test');
@@ -58,7 +57,7 @@ final class DBALCityRepositoryTest extends KernelTestCase
     }
     public function testCityEntityNotFound(): void{
         $this->expectException(CityNotFoundAtLocationException::class);
-        $city = $this->repository->findAtLocation(new Location(-100,-100));
+        $this->repository->findAtLocation(new Location(-100,-100));
 
     }
 
@@ -66,12 +65,11 @@ final class DBALCityRepositoryTest extends KernelTestCase
     {
         $city = new City(new Location(3,3));
         $this->repository->add($city);
-        $this->entityManager->flush();
+        $this->repository->flush();
 
         $city = $this->repository->findAtLocation(new Location(3,3));
         $this->assertNotEmpty($city);
-
-        $this->entityManager->remove($city);
-        $this->entityManager->flush();
+        $this->repository->remove($city);
+        $this->repository->flush();
     }
 }

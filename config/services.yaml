@@ -2,6 +2,7 @@
 # http://symfony.com/doc/current/book/service_container.html
 parameters:
     default_locale: en
+    sulu.model.user.class: App\Entity\User
 
 services:
     # default configuration for services in *this* file
@@ -37,14 +38,18 @@ services:
     OpenTribes\Core\UseCase\DisplayBuildingSlots:
         arguments: ['@App\Repository\DBALBuildingRepository']
 
-    OpenTribes\Core\UseCase\CheckPlayerHasCity:
-        arguments: ['@App\Repository\DBALCityRepository']
 
-    OpenTribes\Core\UseCase\CreateNewCityUseCase:
+    OpenTribes\Core\UseCase\CreateFirstCityUseCase:
         arguments: [
             '@App\Repository\DBALCityRepository',
+            '@App\Repository\DBALUserRepository',
             '@OpenTribes\Core\Service\SimpleLocationFinder'
         ]
 
     OpenTribes\Core\Service\SimpleLocationFinder:
         arguments: ['@App\Repository\DBALCityRepository','10']
+
+    App\Repository\DBALUserRepository:
+        public: true
+        arguments: ['App\Entity\User']
+        factory: [ '@doctrine.orm.default_entity_manager','getRepository' ]

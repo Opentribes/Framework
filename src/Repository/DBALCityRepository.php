@@ -11,6 +11,7 @@ use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\NoResultException;
 use Doctrine\Persistence\ManagerRegistry;
 use OpenTribes\Core\Entity\City as CityInterface;
+use OpenTribes\Core\Exception\FailedToAddCity;
 use OpenTribes\Core\Repository\CityRepository;
 use OpenTribes\Core\Utils\Location;
 
@@ -35,10 +36,13 @@ final class DBALCityRepository extends ServiceEntityRepository implements CityRe
         return $qb->getQuery()->getSingleScalarResult();
     }
 
-    public function add(CityInterface $city): bool
+    public function add(CityInterface $city): void
     {
-        $this->_em->persist($city);
-        return true;
+        try {
+            $this->_em->persist($city);
+        } catch (\Throwable $exception) {
+            throw new FailedToAddCity("Failed to add city to repository", $exception->getCode(), $exception);
+        }
     }
 
     public function countAtLocation(Location $location): int
@@ -56,7 +60,7 @@ final class DBALCityRepository extends ServiceEntityRepository implements CityRe
 
     public function create(Location $location): CityInterface
     {
-        return  new City($location);
+        return new City($location);
     }
 
 
@@ -80,10 +84,19 @@ final class DBALCityRepository extends ServiceEntityRepository implements CityRe
         }
     }
 
+    public function remove(CityInterface $city): void
+    {
+        $this->_em->remove($city);
+    }
+
+    public function flush()
+    {
+        $this->_em->flush();
+    }
 
     public function __destruct()
     {
-        $this->_em->flush();
+        $this->flush();
     }
 
 
