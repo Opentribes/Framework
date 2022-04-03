@@ -6,7 +6,9 @@ namespace App\Tests\Implementation\Repository;
 use App\Entity\City;
 use App\Repository\Exception\CityNotFoundAtLocationException;
 use App\Repository\DBALCityRepository;
+use OpenTribes\Core\Exception\FailedToAddCity;
 use OpenTribes\Core\Utils\Location;
+
 use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
 
 /**
@@ -60,7 +62,11 @@ final class DBALCityRepositoryTest extends KernelTestCase
         $this->repository->findAtLocation(new Location(-100,-100));
 
     }
-
+    public function testFailedToAddCity():void{
+        $this->expectException(FailedToAddCity::class);
+        $city = $this->createMock(\OpenTribes\Core\Entity\City::class);
+        $this->repository->add($city);
+    }
     public function testCanAddCity():void
     {
         $city = new City(new Location(3,3));
