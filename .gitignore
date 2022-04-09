@@ -18,6 +18,7 @@
 # web
 /public/bundles
 /public/uploads
+/public/build
 
 # composer
 /composer.phar
