@@ -17,11 +17,15 @@ use OpenTribes\Core\Utils\Location;
 
 final class DBALCityRepository extends ServiceEntityRepository implements CityRepository
 {
-
     public function __construct(
         protected ManagerRegistry $registry
     ) {
         parent::__construct($registry, City::class);
+    }
+
+    public function __destruct()
+    {
+        $this->flush();
     }
 
     public function countByUsername(string $username): int
@@ -41,7 +45,7 @@ final class DBALCityRepository extends ServiceEntityRepository implements CityRe
         try {
             $this->_em->persist($city);
         } catch (\Throwable $exception) {
-            throw new FailedToAddCity("Failed to add city to repository", $exception->getCode(), $exception);
+            throw new FailedToAddCity('Failed to add city to repository', (int) $exception->getCode(), $exception);
         }
     }
 
@@ -50,8 +54,11 @@ final class DBALCityRepository extends ServiceEntityRepository implements CityRe
         $qb = $this->createQueryBuilder('c');
         $qb->select('COUNT(c.id)')
             ->where(
-                $qb->expr()->eq('c.locationX', ':locationX'),
-                $qb->expr()->eq('c.locationY', ':locationY'),
+                /** @no-named-arguments */
+                $qb->expr()->andX(
+                    $qb->expr()->eq('c.locationX', ':locationX'),
+                    $qb->expr()->eq('c.locationY', ':locationY'),
+                )
             )
             ->setParameter('locationX', $location->getX(), Types::INTEGER)
             ->setParameter('locationY', $location->getY(), Types::INTEGER);
@@ -63,14 +70,16 @@ final class DBALCityRepository extends ServiceEntityRepository implements CityRe
         return new City($location);
     }
 
-
     public function findAtLocation(Location $location): CityInterface
     {
         $qb = $this->createQueryBuilder('c');
         $qb->select('c')
             ->where(
-                $qb->expr()->eq('c.locationX', ':locationX'),
-                $qb->expr()->eq('c.locationY', ':locationY'),
+                /** @no-named-arguments */
+                $qb->expr()->andX(
+                    $qb->expr()->eq('c.locationX', ':locationX'),
+                    $qb->expr()->eq('c.locationY', ':locationY'),
+                )
             )
             ->setParameter('locationX', $location->getX(), Types::INTEGER)
             ->setParameter('locationY', $location->getY(), Types::INTEGER);
@@ -79,7 +88,7 @@ final class DBALCityRepository extends ServiceEntityRepository implements CityRe
             return $query->getSingleResult();
         } catch (NoResultException $exception) {
             throw new CityNotFoundAtLocationException(
-                sprintf("City not found at location %d/%d", $location->getY(), $location->getX())
+                sprintf('City not found at location %d/%d', $location->getY(), $location->getX())
             );
         }
     }
@@ -89,15 +98,8 @@ final class DBALCityRepository extends ServiceEntityRepository implements CityRe
         $this->_em->remove($city);
     }
 
-    public function flush()
+    public function flush(): void
     {
         $this->_em->flush();
     }
-
-    public function __destruct()
-    {
-        $this->flush();
-    }
-
-
 }

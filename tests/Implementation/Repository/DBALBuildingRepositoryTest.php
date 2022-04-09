@@ -21,9 +21,16 @@ final class DBALBuildingRepositoryTest extends KernelTestCase
     public function setUp(): void
     {
         $container = $this->getContainer();
-        /** @var BuildingRepository $repository */
+
+
+        /**
+         * @psalm-ignore-nullable-return
+         * @var BuildingRepository $repository
+         */
         $this->repository = $container->get(DBALBuildingRepository::class);
+        /** @psalm-ignore-nullable-return */
         $this->entityManager = $container->get(EntityManagerInterface::class);
+
 
     }
 
@@ -50,6 +57,7 @@ final class DBALBuildingRepositoryTest extends KernelTestCase
     }
     public function testCanAddBuilding():void{
 
+        /** @var City $city */
         $city = $this->entityManager->getRepository(City::class)->findOneBy([
             'locationX'=>2,
             'locationY'=>2,
@@ -67,7 +75,9 @@ final class DBALBuildingRepositoryTest extends KernelTestCase
         $collection = $this->repository->findAllAtLocation(2,2);
         $this->assertSame(1,$collection->count());
 
-        $this->entityManager->remove($collection->first());
+        /** @var Building $entity */
+        $entity =$collection->first();
+        $this->entityManager->remove($entity);
 
         $this->entityManager->flush();
     }

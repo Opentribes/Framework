@@ -8,39 +8,39 @@ use App\Repository\DBALCityRepository;
 use DateTimeInterface;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
-use Doctrine\ORM\Mapping;
+use Doctrine\ORM\Mapping as ORM;
 use OpenTribes\Core\Entity\BuildingCollection;
 use OpenTribes\Core\Entity\City as CityInterface;
 use OpenTribes\Core\Entity\User;
 use OpenTribes\Core\Utils\Location;
 
-#[Mapping\Entity(repositoryClass: DBALCityRepository::class)]
-#[Mapping\UniqueConstraint("UNQ_location", columns: ["location_x", "location_y"])]
-#[Mapping\Index(columns: ["user_id"], name: "FK_user")]
-#[Mapping\Table(name: "ot_city")]
+#[ORM\Entity(repositoryClass: DBALCityRepository::class)]
+#[ORM\UniqueConstraint('UNQ_location', columns: ['location_x', 'location_y'])]
+#[ORM\Index(columns: ['user_id'], name: 'FK_user')]
+#[ORM\Table(name: 'ot_city')]
 class City implements CityInterface
 {
-    #[Mapping\Id]
-    #[Mapping\GeneratedValue(strategy: "IDENTITY")]
-    #[Mapping\Column(type: "integer")]
+    #[ORM\Id]
+    #[ORM\GeneratedValue(strategy: 'IDENTITY')]
+    #[ORM\Column(type: 'integer')]
     private int $id;
 
-    #[Mapping\Column(name: "user_id", type: "integer")]
+    #[ORM\Column(name: 'user_id', type: 'integer')]
     private int $userId;
 
-    #[Mapping\Column(name: "location_x", type: "integer")]
+    #[ORM\Column(name: 'location_x', type: 'integer')]
     private int $locationX;
-    #[Mapping\Column(name: "location_y", type: "integer")]
+    #[ORM\Column(name: 'location_y', type: 'integer')]
     private int $locationY;
 
-    #[Mapping\Column(name: "created_at", type: "datetime", options: ["default" => "CURRENT_TIMESTAMP"])]
+    #[ORM\Column(name: 'created_at', type: 'datetime', options: ['default' => 'CURRENT_TIMESTAMP'])]
     private DateTimeInterface $createdAt;
 
-    #[Mapping\ManyToOne(targetEntity: \App\Entity\User::class, inversedBy: "cities")]
-    #[Mapping\JoinColumn(name: "user_id", referencedColumnName: "id")]
+    #[ORM\ManyToOne(targetEntity: \App\Entity\User::class, inversedBy: 'cities')]
+    #[ORM\JoinColumn(name: 'user_id', referencedColumnName: 'id')]
     private User $user;
 
-    #[Mapping\OneToMany(mappedBy: "city", targetEntity: Building::class, orphanRemoval: true)]
+    #[ORM\OneToMany(mappedBy: 'city', targetEntity: Building::class, orphanRemoval: true)]
     private Collection $buildings;
 
     public function __construct(Location $location)
@@ -83,5 +83,4 @@ class City implements CityInterface
     {
         $this->user = $user;
     }
-
 }

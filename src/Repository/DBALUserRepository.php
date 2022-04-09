@@ -10,11 +10,10 @@ use Sulu\Bundle\SecurityBundle\Entity\UserRepository as SuluUserRepository;
 
 final class DBALUserRepository extends SuluUserRepository implements UserRepository
 {
-
     public function findByUsername(string $username): UserInterface
     {
         $qb = $this->createQueryBuilder('user')
-            ->select('user', 'cities')
+            ->select(['user', 'cities'])
             ->leftJoin('user.cities', 'cities')
             ->where('user.username=:username');
 
@@ -23,5 +22,4 @@ final class DBALUserRepository extends SuluUserRepository implements UserReposit
 
         return $query->getSingleResult();
     }
-
 }

@@ -13,11 +13,34 @@ use OpenTribes\Core\Entity\BuildingCollection;
 use OpenTribes\Core\Utils\Location;
 use Sulu\Bundle\ContactBundle\Entity\Contact;
 
-
 final class BuildingFixture extends Fixture
 {
     private ObjectManager $manager;
-    private function createUser(string $username):User
+    public function load(ObjectManager $manager): void
+    {
+        $this->manager = $manager;
+        $user = $this->createUser('test_without');
+
+        $user = $this->createUser('test');
+        $city = new City(new Location(10, 10));
+        $city->setUser($user);
+        $manager->persist($city);
+
+        $buildingCollection = new BuildingCollection();
+        $building = new Building('test', 10);
+        $building->setSlot('1');
+        $buildingCollection[] = $building;
+
+        $city->setBuildings($buildingCollection);
+
+        $manager->persist($building);
+
+        $city = new City(new Location(2, 2));
+        $manager->persist($city);
+
+        $manager->flush();
+    }
+    private function createUser(string $username): User
     {
         $userContact = new Contact();
         $userContact->setFirstName($username);
@@ -32,30 +55,5 @@ final class BuildingFixture extends Fixture
         $user->setContact($userContact);
         $this->manager->persist($user);
         return $user;
-    }
-    public function load(ObjectManager $manager): void
-    {
-        $this->manager = $manager;
-        $user = $this->createUser('test_without');
-
-        $user = $this->createUser('test');
-        $city = new City(new Location(10,10));
-        $city->setUser($user);
-        $manager->persist($city);
-
-
-        $buildingCollection = new BuildingCollection();
-        $building = new Building('test', 10);
-        $building->setSlot('1');
-        $buildingCollection[]=$building;
-
-        $city->setBuildings($buildingCollection);
-
-        $manager->persist($building);
-
-        $city = new City(new Location(2,2));
-        $manager->persist($city);
-
-        $manager->flush();
     }
 }

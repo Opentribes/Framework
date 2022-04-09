@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace App\Repository;
 
-
 use App\Entity\Building;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\DBAL\Types\Types;
@@ -15,7 +14,6 @@ use OpenTribes\Core\Repository\BuildingRepository;
 
 final class DBALBuildingRepository extends ServiceEntityRepository implements BuildingRepository
 {
-
     public function __construct(
         protected ManagerRegistry $registry
     ) {
@@ -28,8 +26,11 @@ final class DBALBuildingRepository extends ServiceEntityRepository implements Bu
         $qb->select('b')
             ->join('b.city', 'c')
             ->where(
-                $qb->expr()->eq('c.locationX', ':locationX'),
-                $qb->expr()->eq('c.locationY', ':locationY'),
+                /** @no-named-arguments */
+                $qb->expr()->andX(
+                    $qb->expr()->eq('c.locationX', ':locationX'),
+                    $qb->expr()->eq('c.locationY', ':locationY'),
+                )
             )
             ->setParameter('locationX', $locationX, Types::INTEGER)
             ->setParameter('locationY', $locationY, Types::INTEGER);
@@ -48,9 +49,12 @@ final class DBALBuildingRepository extends ServiceEntityRepository implements Bu
             ->join('b.city', 'c')
             ->join('c.user', 'u')
             ->where(
-                $qb->expr()->eq('c.locationX', ':locationX'),
-                $qb->expr()->eq('c.locationY', ':locationY'),
-                $qb->expr()->eq('u.username', ':username'),
+                /** @no-named-arguments */
+                $qb->expr()->andX(
+                    $qb->expr()->eq('c.locationX', ':locationX'),
+                    $qb->expr()->eq('c.locationY', ':locationY'),
+                    $qb->expr()->eq('u.username', ':username'),
+                )
             )
             ->setParameter('locationX', $locationX, Types::INTEGER)
             ->setParameter('locationY', $locationY, Types::INTEGER)
@@ -63,5 +67,4 @@ final class DBALBuildingRepository extends ServiceEntityRepository implements Bu
     {
         $this->_em->persist($building);
     }
-
 }

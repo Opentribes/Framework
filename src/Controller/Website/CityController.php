@@ -5,8 +5,6 @@ declare(strict_types=1);
 namespace App\Controller\Website;
 
 use App\Message\HttpCityMessage;
-use App\Repository\DBALBuildingRepository;
-use App\Repository\DBALCityRepository;
 use OpenTribes\Core\UseCase\DisplayBuildingSlots;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
 use Sulu\Bundle\CommunityBundle\Controller\AbstractController;

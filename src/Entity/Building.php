@@ -1,44 +1,42 @@
 <?php
+
 declare(strict_types=1);
 
 namespace App\Entity;
 
 use App\Repository\DBALBuildingRepository;
 use DateTimeInterface;
-use Doctrine\ORM\Mapping;
+use Doctrine\ORM\Mapping as ORM;
 use OpenTribes\Core\Entity\Building as BuildingInterface;
-use OpenTribes\Core\Enum\BuildStatus;
 use OpenTribes\Core\Entity\City as CityInterface;
+use OpenTribes\Core\Enum\BuildStatus;
 
-
-#[Mapping\Entity(repositoryClass: DBALBuildingRepository::class)]
-#[Mapping\UniqueConstraint("UNQ_clot_in_city",columns: ["slot","city_id"])]
-#[Mapping\Index(columns: ["city_id"],name: "FK_city")]
-#[Mapping\Table(name: "ot_building")]
+#[ORM\Entity(repositoryClass: DBALBuildingRepository::class)]
+#[ORM\UniqueConstraint('UNQ_clot_in_city', columns: ['slot','city_id'])]
+#[ORM\Index(columns: ['city_id'], name: 'FK_city')]
+#[ORM\Table(name: 'ot_building')]
 class Building implements BuildingInterface
 {
-
-    #[Mapping\Id]
-    #[Mapping\GeneratedValue(strategy: "IDENTITY")]
-    #[Mapping\Column(type: "integer")]
+    #[ORM\Id]
+    #[ORM\GeneratedValue(strategy: 'IDENTITY')]
+    #[ORM\Column(type: 'integer')]
     private int $id;
 
-    #[Mapping\Column(name:"city_id", type: "integer", options: ["unsigned"])]
+    #[ORM\Column(name:'city_id', type: 'integer', options: ['unsigned' => true])]
     private int $cityId;
 
-    #[Mapping\Column(type: "string",length: 255,options: ["fixed"])]
+    #[ORM\Column(type: 'string', length: 255, options: ['fixed' => true])]
     private string $slot = '';
-    #[Mapping\Column(type: "integer",options: ["unsigned","default"=>1])]
+    #[ORM\Column(type: 'integer', options: ['unsigned' => true,'default' => 1])]
     private int $level = 0;
-    #[Mapping\Column(name:"created_at", type: "datetime", options: ["default"=>"CURRENT_TIMESTAMP"])]
+    #[ORM\Column(name:'created_at', type: 'datetime', options: ['default' => 'CURRENT_TIMESTAMP'])]
     private DateTimeInterface $createdAt;
-    #[Mapping\ManyToOne(targetEntity: City::class,inversedBy: "buildings")]
-    #[Mapping\JoinColumn(name: "city_id",referencedColumnName: "id")]
+    #[ORM\ManyToOne(targetEntity: City::class, inversedBy: 'buildings')]
+    #[ORM\JoinColumn(name: 'city_id', referencedColumnName: 'id')]
     private CityInterface $city;
 
-    #[Mapping\Column(type: "string",enumType:"OpenTribes\Core\Enum\BuildStatus",options: ["default"=>"default"])]
+    #[ORM\Column(type: 'string', enumType:\OpenTribes\Core\Enum\BuildStatus::class, options: ['default' => 'default'])]
     private BuildStatus $status;
-
 
     public function __construct(private string $name, private int $maximumLevel)
     {
@@ -94,7 +92,6 @@ class Building implements BuildingInterface
     {
         return $this->maximumLevel;
     }
-
 
     public function getCity(): CityInterface
     {

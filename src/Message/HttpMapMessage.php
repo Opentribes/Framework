@@ -10,22 +10,18 @@ use Symfony\Component\HttpFoundation\Request;
 
 final class HttpMapMessage implements CreateFirstCityMessage
 {
+    use UserNameTrait;
     public CityView $city;
     private bool $cityCreated = false;
     private bool $userHasCities = false;
 
-    public function __construct(private Request $request){
-
+    public function __construct(private Request $request)
+    {
     }
 
     public function hasCities(): bool
     {
-        return  $this->userHasCities === true;
-    }
-
-    public function getUsername(): string
-    {
-        return $this->request->getSession()->getBag('attributes')->get('_security.last_username');
+        return $this->userHasCities === true;
     }
 
     public function enableResult(): void
@@ -35,17 +31,16 @@ final class HttpMapMessage implements CreateFirstCityMessage
 
     public function cityCreated(): bool
     {
-       return $this->cityCreated === true;
+        return $this->cityCreated === true;
     }
 
     public function activateCreated(): void
     {
-         $this->cityCreated = true;
+        $this->cityCreated = true;
     }
 
     public function setCity(CityView $city): void
     {
         $this->city = $city;
     }
-
 }

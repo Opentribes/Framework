@@ -22,6 +22,7 @@ final class DBALCityRepositoryTest extends KernelTestCase
     public function setUp(): void
     {
         $container = $this->getContainer();
+        /** @psalm-ignore-nullable-return */
         $this->repository = $container->get(DBALCityRepository::class);
     }
 

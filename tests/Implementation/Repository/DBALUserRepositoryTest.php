@@ -16,7 +16,8 @@ final class DBALUserRepositoryTest extends KernelTestCase
     public function setUp(): void
     {
         $container = $this->getContainer();
-        $this->repository = $container->get('dbal.user.repository');
+        /** @psalm-ignore-nullable-return */
+        $this->repository = $container->get(DBALUserRepository::class);
     }
 
     public function testUsernameNotExists():void{

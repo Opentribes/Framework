@@ -56,7 +56,7 @@ return [
     */
 
     'exclude' => [
-        'bin',
+        'bin','migrations'
     ],
 
     'add' => [
