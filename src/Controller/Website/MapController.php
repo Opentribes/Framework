@@ -6,6 +6,7 @@ namespace App\Controller\Website;
 
 use App\Message\HttpMapMessage;
 use OpenTribes\Core\UseCase\CreateFirstCityUseCase;
+use OpenTribes\Core\UseCase\ViewMapUseCase;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
 use Sulu\Bundle\CommunityBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
@@ -16,15 +17,18 @@ use Symfony\Component\Routing\Annotation\Route;
 final class MapController extends AbstractController
 {
     public function __construct(
-        private CreateFirstCityUseCase $createNewCityUseCase
+        private CreateFirstCityUseCase $createNewCityUseCase,
+        private ViewMapUseCase $viewMapUseCase,
     ) {
     }
     #[Route(path: '/map')]
     public function indexAction(Request $request): Response
     {
+
         $message = new HttpMapMessage($request);
         $this->createNewCityUseCase->process($message);
-
+        $this->viewMapUseCase->process($message);
+        dump($message->map);
         return $this->render('pages/map.html.twig', []);
     }
 }

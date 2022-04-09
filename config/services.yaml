@@ -3,6 +3,8 @@
 parameters:
     default_locale: en
     sulu.model.user.class: App\Entity\User
+    map.chunk: '%env(MAP_CHUNK_SIZE)%'
+    map.width: '%env(MAP_WIDTH)%'
 
 services:
     # default configuration for services in *this* file
@@ -44,6 +46,19 @@ services:
             '@App\Repository\DBALCityRepository',
             '@App\Repository\DBALUserRepository',
             '@OpenTribes\Core\Service\SimpleLocationFinder'
+        ]
+
+    OpenTribes\Core\UseCase\ViewMapUseCase:
+      arguments: [
+        '@App\Repository\TextMapTileRepository',
+        '@App\Repository\DBALCityRepository'
+      ]
+
+    App\Repository\TextMapTileRepository:
+        arguments: [
+        '%kernel.project_dir%/storage',
+        '%map.width%',
+        '%map.chunk%',
         ]
 
     OpenTribes\Core\Service\SimpleLocationFinder:

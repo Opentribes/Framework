@@ -34,7 +34,7 @@ final class DBALBuildingRepository extends ServiceEntityRepository implements Bu
             )
             ->setParameter('locationX', $locationX, Types::INTEGER)
             ->setParameter('locationY', $locationY, Types::INTEGER);
-        return new BuildingCollection($qb->getQuery()->getResult());
+        return new BuildingCollection(...$qb->getQuery()->getResult());
     }
 
     public function findAvailable(): BuildingCollection

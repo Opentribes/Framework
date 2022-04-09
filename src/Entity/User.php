@@ -27,7 +27,7 @@ class User extends SuluUser implements UserInterface
 
     public function getCities(): CityCollection
     {
-        return new CityCollection($this->cities->toArray());
+        return new CityCollection(...$this->cities->toArray());
     }
 
     public function getUsername(): string
