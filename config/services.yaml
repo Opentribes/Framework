@@ -56,7 +56,7 @@ services:
 
     App\Repository\TextMapTileRepository:
         arguments: [
-        '%kernel.project_dir%/storage',
+        '%kernel.project_dir%/storage/map',
         '%map.width%',
         '%map.chunk%',
         ]
