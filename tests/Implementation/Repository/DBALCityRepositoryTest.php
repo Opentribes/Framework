@@ -9,6 +9,7 @@ use App\Repository\DBALCityRepository;
 use OpenTribes\Core\Exception\FailedToAddCity;
 use OpenTribes\Core\Utils\Location;
 
+use OpenTribes\Core\Utils\Viewport;
 use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
 
 /**
@@ -79,4 +80,12 @@ final class DBALCityRepositoryTest extends KernelTestCase
         $this->repository->remove($city);
         $this->repository->flush();
     }
+
+    public function testCanFindCitiesInViewport():void
+    {
+        $viewport = new Viewport(new Location(2,2),3,3);
+        $cities = $this->repository->findByViewport($viewport);
+        $this->assertSame(1,$cities->count());
+    }
+
 }

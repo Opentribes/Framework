@@ -108,7 +108,7 @@ final class DBALCityRepository extends ServiceEntityRepository implements CityRe
                 )
             )
             ->setParameter('minimumX', $viewport->getMinimumX(), Types::INTEGER)
-            ->setParameter('maximumX', $viewport->getMinimumX(), Types::INTEGER)
+            ->setParameter('maximumX', $viewport->getMaximumX(), Types::INTEGER)
             ->setParameter('minimumY', $viewport->getMinimumY(), Types::INTEGER)
             ->setParameter('maximumY', $viewport->getMaximumY(), Types::INTEGER);
 

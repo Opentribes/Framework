@@ -22,14 +22,14 @@ final class DBALBuildingRepository extends ServiceEntityRepository implements Bu
 
     public function findAllAtLocation(int $locationX, int $locationY): BuildingCollection
     {
-        $qb = $this->createQueryBuilder('b');
-        $qb->select('b')
-            ->join('b.city', 'c')
+        $qb = $this->createQueryBuilder('building');
+        $qb->select('building')
+            ->join('building.city', 'city')
             ->where(
                 /** @no-named-arguments */
                 $qb->expr()->andX(
-                    $qb->expr()->eq('c.locationX', ':locationX'),
-                    $qb->expr()->eq('c.locationY', ':locationY'),
+                    $qb->expr()->eq('city.locationX', ':locationX'),
+                    $qb->expr()->eq('city.locationY', ':locationY'),
                 )
             )
             ->setParameter('locationX', $locationX, Types::INTEGER)
@@ -44,16 +44,16 @@ final class DBALBuildingRepository extends ServiceEntityRepository implements Bu
 
     public function userCanBuildAtLocation(int $locationX, int $locationY, string $username): bool
     {
-        $qb = $this->createQueryBuilder('b');
-        $qb->select('COUNT(c.id)')
-            ->join('b.city', 'c')
-            ->join('c.user', 'u')
+        $qb = $this->createQueryBuilder('building');
+        $qb->select('COUNT(city.id)')
+            ->join('building.city', 'city')
+            ->join('city.user', 'user')
             ->where(
                 /** @no-named-arguments */
                 $qb->expr()->andX(
-                    $qb->expr()->eq('c.locationX', ':locationX'),
-                    $qb->expr()->eq('c.locationY', ':locationY'),
-                    $qb->expr()->eq('u.username', ':username'),
+                    $qb->expr()->eq('city.locationX', ':locationX'),
+                    $qb->expr()->eq('city.locationY', ':locationY'),
+                    $qb->expr()->eq('user.username', ':username'),
                 )
             )
             ->setParameter('locationX', $locationX, Types::INTEGER)
