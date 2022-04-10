@@ -1,6 +1,7 @@
 import {Controller} from '@hotwired/stimulus';
 import * as THREE from 'three'
 import {GLTFLoader} from "three/examples/jsm/loaders/GLTFLoader";
+import {OrthographicCamera} from "three/src/cameras/OrthographicCamera";
 
 
 export default class extends Controller {
@@ -36,16 +37,17 @@ export default class extends Controller {
                 scene.add(object.scene);
 
                 camera = object.cameras[0];
-
-                camera.left = size * aspectRatio / -2;
-                camera.right = size * aspectRatio /2;
-                camera.top = size / 2;
-                camera.bottom = size / -2;
+                if(camera instanceof  OrthographicCamera){
+                    camera.left = size * aspectRatio / -2;
+                    camera.right = size * aspectRatio /2;
+                    camera.top = size / 2;
+                    camera.bottom = size / -2;
+                    camera.updateProjectionMatrix();
+                }
 
 
                 centerPoint = object.scene.getObjectByName("Empty");
                 camera.lookAt(centerPoint.position);
-                camera.updateProjectionMatrix();
                 renderer.render(scene, camera);
 
             }, (xhr) => {
