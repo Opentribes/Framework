@@ -24,7 +24,9 @@ final class HttpMapMessage implements CreateFirstCityMessage, ViewMapMessage
 
     public function __construct(private Request $request)
     {
-        $this->location = new Location();
+        $locationX = (int)$this->request->get('locationX');
+        $locationY = (int)$this->request->get('locationY');
+        $this->location = new Location($locationX,$locationY);
     }
 
     public function getViewortWidth(): int

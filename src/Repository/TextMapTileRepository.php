@@ -5,7 +5,6 @@ declare(strict_types=1);
 namespace App\Repository;
 
 use App\Entity\Tile;
-use JetBrains\PhpStorm\Pure;
 use OpenTribes\Core\Entity\TileCollection;
 use OpenTribes\Core\Repository\MapTileRepository;
 use OpenTribes\Core\Utils\Location;
