@@ -9,12 +9,12 @@ export default class extends Controller {
         let width = this.element.clientWidth;
         let height = this.element.clientHeight;
         let aspectRatio = width / height;
-        let loader = new GLTFLoader();
+
         let renderer = new THREE.WebGLRenderer({alpha: true});
         let size = 20;
 
         let camera:THREE.Camera;
-
+        let loader = new GLTFLoader();
         let scene = new THREE.Scene();
 
         renderer.setSize(width, height);
