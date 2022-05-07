@@ -16,14 +16,17 @@
     "repositories": [
         {
             "type": "path",
-            "url": "../Game"
+            "url": "../Game",
+            "options": {
+                "symlink": true
+            }
         }
     ],
     "require": {
         "symfony/webpack-encore-bundle": "^1.14",
         "doctrine/doctrine-migrations-bundle": "^3.2",
         "doctrine/orm": "^2.11.0",
-        "opentribes/game": "^0@dev",
+        "opentribes/game": "*@dev",
         "sensio/framework-extra-bundle": "^6.2",
         "sulu/community-bundle": "^2@dev",
         "symfony/mailer": "^5.4",
