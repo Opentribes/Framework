@@ -23,7 +23,7 @@
         "symfony/webpack-encore-bundle": "^1.14",
         "doctrine/doctrine-migrations-bundle": "^3.2",
         "doctrine/orm": "^2.11.0",
-        "opentribes/core": "^0@dev",
+        "opentribes/game": "^0@dev",
         "sensio/framework-extra-bundle": "^6.2",
         "sulu/community-bundle": "^2@dev",
         "symfony/mailer": "^5.4",
