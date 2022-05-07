@@ -1,85 +1,39 @@
 {
-    "name": "sulu/skeleton",
+    "name": "opentribes/framework",
     "license": "MIT",
     "type": "project",
-    "description": "Project template for starting your new project based on the Sulu content management system",
-    "homepage": "https://sulu.io/",
+    "description": "Framework implementation for the browsergame game OpenTribes",
     "keywords": [
-        "symfony",
-        "sulu",
-        "sulucms",
-        "cms",
-        "web-application",
-        "platform",
-        "data-managment",
-        "project-template"
+        "browsergame",
+        "clean-code",
+        "phpgame"
     ],
-
     "authors": [
         {
-            "name": "Sulu Community",
-            "homepage": "https://github.com/sulu/skeleton/graphs/contributors"
+            "name": "Vitalij Mik"
         }
     ],
-    "support": {
-        "issues": "https://github.com/sulu/skeleton/issues",
-        "source": "https://github.com/sulu/skeleton",
-        "docs": "https://docs.sulu.io/",
-        "chat": "https://sulu.io/services-and-support#chat"
-    },
+    "repositories": [
+        {
+            "type": "path",
+            "url": "../Game"
+        }
+    ],
     "require": {
-        "php": "^7.2 || ^8.0",
-        "ext-ctype": "*",
-        "ext-iconv": "*",
-        "dantleech/phpcr-migrations-bundle": "^1.2",
-        "doctrine/doctrine-bundle": "^2.5",
-        "doctrine/doctrine-fixtures-bundle": "^3.4",
-        "friendsofsymfony/http-cache-bundle": "^2.9",
-        "handcraftedinthealps/zendsearch": "^2.1",
-        "jackalope/jackalope-doctrine-dbal": "^1.7",
-        "sulu/sulu": "~2.5.0@dev",
-        "symfony/config": "^5.4",
-        "symfony/dotenv": "^5.4",
-        "symfony/flex": "^1.17 || ^2.0",
-        "symfony/framework-bundle": "^5.4",
+        "symfony/webpack-encore-bundle": "^1.14",
+        "doctrine/doctrine-migrations-bundle": "^3.2",
+        "doctrine/orm": "^2.11.0",
+        "opentribes/core": "^0@dev",
+        "sensio/framework-extra-bundle": "^6.2",
+        "sulu/community-bundle": "^2@dev",
         "symfony/mailer": "^5.4",
-        "symfony/monolog-bridge": "^5.4",
-        "symfony/monolog-bundle": "^3.4",
-        "symfony/runtime": "^5.4",
-        "symfony/security-bundle": "^5.4",
-        "symfony/swiftmailer-bundle": "^3.5",
-        "symfony/twig-bundle": "^5.4",
-         "wikimedia/composer-merge-plugin": "^2.0"
+        "doctrine/dbal": "^3.2",
+        "wikimedia/composer-merge-plugin": "^2.0",
+        "symfony/flex": "^1.17 || ^2.0"
     },
     "require-dev": {
-        "phpcr/phpcr-shell": "^1.3",
-        "phpunit/phpunit": "^8.5 || ^9.5",
-        "symfony/browser-kit": "^5.4",
-        "symfony/css-selector": "^5.4",
-        "symfony/debug-bundle": "^5.4",
-        "symfony/error-handler": "^5.4",
-        "symfony/phpunit-bridge": "^5.4",
-        "symfony/thanks": "^1.2",
-        "symfony/web-profiler-bundle": "^5.4"
-    },
-    "autoload": {
-        "psr-4": {
-            "App\\": "src/"
-        }
-    },
-    "autoload-dev": {
-        "psr-4": {
-            "App\\Tests\\": "tests/"
-        }
-    },
-    "replace": {
-        "paragonie/random_compat": "2.*",
-        "symfony/polyfill-ctype": "*",
-        "symfony/polyfill-iconv": "*",
-        "symfony/polyfill-php72": "*",
-        "symfony/polyfill-php71": "*",
-        "symfony/polyfill-php70": "*",
-        "symfony/polyfill-php56": "*"
+        "nunomaduro/phpinsights": "^2",
+        "vimeo/psalm": "^4"
     },
     "scripts": {
         "auto-scripts": {
@@ -102,34 +56,32 @@
         "post-create-project-cmd": [
             "@php -r \"file_put_contents('.gitignore', str_replace(['composer.lock' . PHP_EOL, 'symfony.lock' . PHP_EOL, 'package-lock.json' . PHP_EOL], ['', '', ''], file_get_contents('.gitignore')));\"",
             "@php bin/adminconsole sulu:admin:info --ansi"
-        ]
-    },
-    "config": {
-        "sort-packages": true,
-        "allow-plugins": {
-            "composer/package-versions-deprecated": true,
-            "symfony/flex": true,
-            "symfony/thanks": true,
-            "dealerdirect/phpcodesniffer-composer-installer": true,
-            "symfony/runtime": true,
-            "wikimedia/composer-merge-plugin": true
-        }
+        ],
+        "ot:phpinsights": "vendor/bin/phpinsights --config-path=phpinsights.php",
+        "ot:fix-style": "vendor/bin/phpinsights --config-path=phpinsights.php -s --fix"
     },
     "extra": {
-        "symfony": {
-            "allow-contrib": true
-        },
         "merge-plugin": {
             "require": [
-                "composer.overwrites.json"
+                "composer.original.json"
             ],
             "recurse": true,
-            "replace": true,
+            "replace": false,
             "ignore-duplicates": false,
             "merge-dev": true,
-            "merge-extra": false,
-            "merge-extra-deep": false,
+            "merge-extra": true,
+            "merge-extra-deep": true,
             "merge-scripts": true
         }
+    },
+    "config": {
+        "allow-plugins": {
+            "dealerdirect/phpcodesniffer-composer-installer": true,
+            "symfony/runtime": true,
+            "symfony/flex": true,
+            "symfony/thanks": true,
+            "wikimedia/composer-merge-plugin": true
+        },
+        "sort-packages": true
     }
 }
