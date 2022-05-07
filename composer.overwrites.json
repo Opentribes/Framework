@@ -2,12 +2,7 @@
   "repositories": [
     {
       "type": "path",
-      "url": "../Game",
-      "options": {
-        "versions": {
-          "opentribes/core": "0-dev"
-        }
-      }
+      "url": "../Game"
     }
   ],
   "require": {
