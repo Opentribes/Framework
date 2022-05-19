@@ -13,3 +13,5 @@ bin/console doctrine:migrations:migrate --no-interaction
 #load fixtures
 doctrine:fixture:load
 ````
+
+
