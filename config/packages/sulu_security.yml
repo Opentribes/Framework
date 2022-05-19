@@ -1,0 +1,8 @@
+sulu_security:
+  objects:
+    user:
+      model: App\Entity\User
+      repository: Sulu\Bundle\SecurityBundle\Entity\UserRepository
+    role:
+      model: Sulu\Bundle\SecurityBundle\Entity\Role
+      repository: Sulu\Bundle\SecurityBundle\Entity\RoleRepository

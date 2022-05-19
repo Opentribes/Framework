@@ -35,7 +35,7 @@ class Building implements BuildingInterface
     #[ORM\JoinColumn(name: 'city_id', referencedColumnName: 'id')]
     private CityInterface $city;
 
-    #[ORM\Column(type: 'string', enumType:\OpenTribes\Core\Enum\BuildStatus::class, options: ['default' => 'default'])]
+    #[ORM\Column(type: 'string', enumType: BuildStatus::class, options: ['default' => 'default'])]
     private BuildStatus $status;
 
     public function __construct(private string $name, private int $maximumLevel)

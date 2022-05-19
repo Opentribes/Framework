@@ -23,16 +23,16 @@
         }
     ],
     "require": {
-        "symfony/webpack-encore-bundle": "^1.14",
+        "opentribes/game": "dev-main",
+        "doctrine/dbal": "^3.2",
         "doctrine/doctrine-migrations-bundle": "^3.2",
         "doctrine/orm": "^2.11.0",
-        "opentribes/game": "*@dev",
         "sensio/framework-extra-bundle": "^6.2",
         "sulu/community-bundle": "^2@dev",
+        "symfony/flex": "^1.17 || ^2.0",
         "symfony/mailer": "^5.4",
-        "doctrine/dbal": "^3.2",
-        "wikimedia/composer-merge-plugin": "^2.0",
-        "symfony/flex": "^1.17 || ^2.0"
+        "symfony/webpack-encore-bundle": "^1.14",
+        "wikimedia/composer-merge-plugin": "^2.0"
     },
     "require-dev": {
         "nunomaduro/phpinsights": "^2",
