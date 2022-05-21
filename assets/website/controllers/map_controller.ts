@@ -41,5 +41,6 @@ export default class extends Controller {
         renderer.render(scene, camera);
 
 
+
     }
 }
