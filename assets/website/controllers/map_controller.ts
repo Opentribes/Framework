@@ -19,9 +19,6 @@ export default class extends Controller {
         const loader = new GLTFLoader();
 
 
-
-
-
         let tileList: Map<string, any> = new Map(
             [
                 ['0000', {
@@ -36,31 +33,39 @@ export default class extends Controller {
                 }]
             ]
         );
-
-        let promises = {};
+        let promiseMap = [];
+        let promises = [];
+        let promiseIndex = 0;
         tileList.forEach(function (tileData) {
             let promise = loader.loadAsync(`${tilePath}/${tileData.fileName}.glb`);
-            promises[tileData.mapName] = (promise);
+            promises.push(promise);
+            promiseMap[promiseIndex] = tileData.mapName;
+            promiseIndex++;
         });
-        Promise.all(Object.entries(promises)).then(function (value) {
-            value.forEach(function (result) {
-                result[1].then(function (value) {
-                    tileList.get(result[0]).threeObj = value;
-                });
-            })
+
+        Promise.all(promises).then(function (value) {
+
+
+            value.forEach(function (result, index) {
+                let tileKey = promiseMap[index];
+                let currentTile = tileList.get(tileKey);
+                currentTile.threeObj = result;
+            });
+
 
             mapDataJson.layers.background.forEach(function (tileJson) {
+
                 let currentTile = tileList.get(tileJson.data);
-                console.log(currentTile);
-               // scene.add(currentTile.threeObj.scene);
+                console.log(currentTile.threeObj.scene.children[0]);
+                scene.add(currentTile.threeObj.scene);
 
             });
+            console.log(scene);
             renderer.setPixelRatio(window.devicePixelRatio);
             renderer.setSize(width, height);
             container.appendChild(renderer.domElement);
             renderer.render(scene, camera);
         })
-
 
 
     }
