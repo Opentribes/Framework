@@ -40,5 +40,6 @@ export default class extends Controller {
         container.appendChild(renderer.domElement);
         renderer.render(scene, camera);
 
+
     }
 }
