@@ -1,12 +1,9 @@
 import {Controller} from '@hotwired/stimulus';
 import * as THREE from 'three'
 import {GLTFLoader, GLTF} from "three/examples/jsm/loaders/GLTFLoader";
-import {OrthographicCamera} from "three/src/cameras/OrthographicCamera";
-import {Vector3} from "three";
-import Stats from "three/examples/jsm/libs/stats.module";
-
+import TileRepository from "../src/TileRepository";
 export default class extends Controller {
-    connect() {
+    async connect() {
         const container: Element = this.element;
         const width = container.clientWidth;
         const height = container.clientHeight;
@@ -18,55 +15,23 @@ export default class extends Controller {
         const renderer = new THREE.WebGLRenderer({antialias: true, alpha: true});
         const loader = new GLTFLoader();
 
+        const tileRepository = new TileRepository(tilePath,loader);
+        const tileList = await tileRepository.getTileList();
+        console.log(tileList);
+        mapDataJson.layers.background.forEach(function (tileJson) {
+            const currentTile = Object.assign({},tileList.get(tileJson.data));
 
-        let tileList: Map<string, any> = new Map(
-            [
-                ['0000', {
-                    fileName: 'gras',
-                    mapName: '0000',
-                    threeObj: {}
-                }],
-                ['0001', {
-                    fileName: 'sea',
-                    mapName: '0001',
-                    threeObj: {}
-                }]
-            ]
-        );
-        let promiseMap = [];
-        let promises = [];
-        let promiseIndex = 0;
-        tileList.forEach(function (tileData) {
-            let promise = loader.loadAsync(`${tilePath}/${tileData.fileName}.glb`);
-            promises.push(promise);
-            promiseMap[promiseIndex] = tileData.mapName;
-            promiseIndex++;
+            currentTile.mesh.uuid = tileJson.id;
+            currentTile.mesh.position.x = tileJson.location.x;
+            currentTile.mesh.position.y = tileJson.location.y;
+
+            scene.add(currentTile.mesh);
         });
-
-        Promise.all(promises).then(function (value) {
-
-
-            value.forEach(function (result, index) {
-                let tileKey = promiseMap[index];
-                let currentTile = tileList.get(tileKey);
-                currentTile.threeObj = result;
-            });
-
-
-            mapDataJson.layers.background.forEach(function (tileJson) {
-
-                let currentTile = tileList.get(tileJson.data);
-                console.log(currentTile.threeObj.scene.children[0]);
-                scene.add(currentTile.threeObj.scene);
-
-            });
-            console.log(scene);
-            renderer.setPixelRatio(window.devicePixelRatio);
-            renderer.setSize(width, height);
-            container.appendChild(renderer.domElement);
-            renderer.render(scene, camera);
-        })
-
+        console.log(scene);
+        renderer.setPixelRatio(window.devicePixelRatio);
+        renderer.setSize(width, height);
+        container.appendChild(renderer.domElement);
+        renderer.render(scene, camera);
 
     }
 }
