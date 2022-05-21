@@ -61,7 +61,22 @@
             "@php bin/adminconsole sulu:admin:info --ansi"
         ],
         "ot:phpinsights": "vendor/bin/phpinsights --config-path=phpinsights.php",
-        "ot:fix-style": "vendor/bin/phpinsights --config-path=phpinsights.php -s --fix"
+        "ot:fix-style": "vendor/bin/phpinsights --config-path=phpinsights.php -s --fix",
+        "sulu:webspace:export":[
+            "bin/adminconsole doctrine:phpcr:workspace:export -p /cmf data/cmf.xml",
+            "bin/websiteconsole doctrine:phpcr:workspace:export -p /cmf data/cmf_live.xml",
+            "bin/adminconsole doctrine:phpcr:workspace:export -p /jcr:versions data/datajcr.xml"
+        ],
+        "sulu:webspace:clear":[
+            "bin/adminconsole doctrine:phpcr:node:remove /cmf",
+            "bin/websiteconsole doctrine:phpcr:node:remove /cmf",
+            "bin/adminconsole doctrine:phpcr:node:remove /jcr:versions"
+        ],
+        "sulu:webspace:import":[
+            "bin/adminconsole doctrine:phpcr:workspace:import -p /cmf data/cmf.xml",
+            "bin/websiteconsole doctrine:phpcr:workspace:import -p /cmf data/cmf_live.xml",
+            "bin/adminconsole doctrine:phpcr:workspace:import -p /jcr:versions data/datajcr.xml"
+        ]
     },
     "extra": {
         "merge-plugin": {
