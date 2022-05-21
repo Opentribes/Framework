@@ -41,9 +41,4 @@ export default class TileRepository {
         });
         return this.tileList;
     }
-
-    async _getTilePromises() {
-
-    }
-
 }
