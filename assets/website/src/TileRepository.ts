@@ -1,4 +1,3 @@
-'use strict';
 import Tile from "./Tile";
 import {GLTFLoader} from "three/examples/jsm/loaders/GLTFLoader";
 import {Loader} from "three/src/Three";

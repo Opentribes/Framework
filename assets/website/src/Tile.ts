@@ -1,4 +1,3 @@
-'use strict';
 import {Mesh} from "three";
 
 export default interface Tile {
