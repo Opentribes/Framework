@@ -33,7 +33,7 @@ export default class TileRepository {
 
         tileData.forEach(function(data,index){
             let currentTileIndex = promises[index].id;
-            let currentTile = obj.tileList.get(currentTileIndex);
+            let currentTile = scope.tileList.get(currentTileIndex);
             currentTile.object = data.scene;
             scope.tileList.set(currentTileIndex,currentTile);
         });
