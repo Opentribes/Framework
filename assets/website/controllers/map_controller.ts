@@ -11,12 +11,11 @@ export default class extends Controller {
         const width = container.clientWidth;
         const height = container.clientHeight;
         const aspectRatio = width / height;
+
         const mapDataJson = JSON.parse(container.getAttribute('data-map'));
         const tilePath = container.getAttribute('data-tilePath');
-
+        THREE.Object3D.DefaultUp = new THREE.Vector3(0,0,1);
         const camera = new THREE.PerspectiveCamera(45, aspectRatio, 1, 10000);
-
-
         const scene = new THREE.Scene();
         const renderer = new THREE.WebGLRenderer({antialias: true, alpha: true});
         const controls = new OrbitControls(camera, renderer.domElement);
@@ -28,6 +27,14 @@ export default class extends Controller {
 
 
         const tileList = await tileRepository.getTileList();
+
+        const hemi = new THREE.HemisphereLight(0xffffbb, 0x080820, 1);
+
+        camera.position.set(0, 5, -5);
+        hemi.position.set(0, 20, 0);
+
+        scene.add(hemi);
+
 
 
         mapDataJson.layers.background.forEach(function (tileJson) {
@@ -46,8 +53,6 @@ export default class extends Controller {
         renderer.setSize(width, height);
 
         container.appendChild(renderer.domElement);
-
-        camera.position.set(0, 20, 100);
         controls.update();
 
 
