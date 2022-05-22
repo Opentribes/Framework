@@ -2,6 +2,7 @@ import {Controller} from '@hotwired/stimulus';
 import * as THREE from 'three'
 import {GLTFLoader} from "three/examples/jsm/loaders/GLTFLoader";
 import TileRepository from "../src/TileRepository";
+
 import {OrbitControls} from "three/examples/jsm/controls/OrbitControls";
 
 
@@ -14,7 +15,7 @@ export default class extends Controller {
 
         const mapDataJson = JSON.parse(container.getAttribute('data-map'));
         const tilePath = container.getAttribute('data-tilePath');
-        THREE.Object3D.DefaultUp = new THREE.Vector3(0,0,1);
+        THREE.Object3D.DefaultUp = new THREE.Vector3(0, 0, 1);
         const camera = new THREE.PerspectiveCamera(45, aspectRatio, 1, 10000);
         const scene = new THREE.Scene();
         const renderer = new THREE.WebGLRenderer({antialias: true, alpha: true});
@@ -30,21 +31,25 @@ export default class extends Controller {
 
         const hemi = new THREE.HemisphereLight(0xffffbb, 0x080820, 1);
 
-        camera.position.set(0, 5, -5);
+        camera.position.set(0, 20, -20);
         hemi.position.set(0, 20, 0);
+
 
         scene.add(hemi);
 
 
-
+        console.log(mapDataJson.layers.background);
         mapDataJson.layers.background.forEach(function (tileJson) {
             const currentTile = tileList.get(tileJson.data);
+            if (currentTile === undefined) {
+                return;
+            }
             const meshData = currentTile.object.clone(true);
 
             meshData.uuid = tileJson.id;
-            meshData.position.x = tileJson.location.x;
-            meshData.position.z = tileJson.location.y;
-
+            meshData.position.x = tileJson.location.x * -1;
+            meshData.position.z = tileJson.location.y * -1;
+            meshData.scale.set(0.5, 0.5, 0.5);
             scene.add(meshData);
         });
 
