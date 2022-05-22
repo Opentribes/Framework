@@ -15,7 +15,7 @@ export default class extends Controller {
 
         const mapDataJson = JSON.parse(container.getAttribute('data-map'));
         const tilePath = container.getAttribute('data-tilePath');
-        THREE.Object3D.DefaultUp = new THREE.Vector3(0, 0, 1);
+        const halfPi = Math.PI/2;
         const camera = new THREE.PerspectiveCamera(45, aspectRatio, 1, 10000);
         const scene = new THREE.Scene();
         const renderer = new THREE.WebGLRenderer({antialias: true, alpha: true});
@@ -31,21 +31,20 @@ export default class extends Controller {
 
         const hemi = new THREE.HemisphereLight(0xffffbb, 0x080820, 1);
 
+        const axesHelper = new THREE.AxesHelper(2);
+
+        axesHelper.rotation.set(-halfPi,0,-halfPi);
+        scene.add(axesHelper);
 
         controls.enableDamping = true; // an animation loop is required when either damping or auto-rotation are enabled
         controls.dampingFactor = 0.05;
 
-        controls.minDistance = 10;
+        controls.minDistance = 5;
         controls.maxDistance = 30;
-
-        camera.position.set(0, 10, -20);
-
+        camera.position.set(0, 10,0);
         hemi.position.set(0, 20, 0);
 
-
         scene.add(hemi);
-
-
 
         mapDataJson.layers.background.forEach(function (tileJson) {
             const currentTile = tileList.get(tileJson.data);
@@ -55,8 +54,8 @@ export default class extends Controller {
             const meshData = currentTile.object.clone(true);
 
             meshData.uuid = tileJson.id;
-            meshData.position.x = tileJson.location.x * -1;
-            meshData.position.z = tileJson.location.y * -1;
+
+            meshData.position.set(tileJson.location.x, 0,tileJson.location.y);
             meshData.scale.set(0.5, 0.5, 0.5);
             scene.add(meshData);
         });
