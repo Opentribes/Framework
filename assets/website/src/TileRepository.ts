@@ -31,12 +31,13 @@ export default class TileRepository {
 
         const tileData = await Promise.all(promises.map(({promise}) => promise));
 
-        tileData.forEach(function(data,index){
+        tileData.forEach((data, index) => {
             let currentTileIndex = promises[index].id;
             let currentTile = scope.tileList.get(currentTileIndex);
             currentTile.object = data.scene;
-            scope.tileList.set(currentTileIndex,currentTile);
+            scope.tileList.set(currentTileIndex, currentTile);
         });
+
         return this.tileList;
     }
 }

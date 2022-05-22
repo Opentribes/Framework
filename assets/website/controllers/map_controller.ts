@@ -5,7 +5,7 @@ import TileRepository from "../src/TileRepository";
 
 
 export default class extends Controller {
-   async connect() {
+    connect() {
         const container: Element = this.element;
         const width = container.clientWidth;
         const height = container.clientHeight;
@@ -21,27 +21,31 @@ export default class extends Controller {
         const tileRepository = new TileRepository(tilePath, loader);
 
 
-        const tileList = await tileRepository.getTileList();
+        const tileList = tileRepository.getTileList();
+        tileList.then(function (tileList) {
 
-        camera.lookAt(scene.position);
+            camera.lookAt(scene.position);
 
-        mapDataJson.layers.background.forEach(function (tileJson) {
-            const currentTile = tileList.get(tileJson.data);
+            mapDataJson.layers.background.forEach(function (tileJson) {
+                const currentTile = tileList.get(tileJson.data);
 
-            currentTile.object.uuid = tileJson.id;
-            currentTile.object.position.x = tileJson.location.x;
-            currentTile.object.position.y = tileJson.location.y;
+                currentTile.object.uuid = tileJson.id;
+                currentTile.object.position.x = tileJson.location.x;
+                currentTile.object.position.y = tileJson.location.y;
 
-            scene.add(currentTile.object);
+                scene.add(currentTile.object);
+            });
+            console.log(scene);
+
+
+            renderer.setPixelRatio(window.devicePixelRatio);
+            renderer.setSize(width, height);
+
+            container.appendChild(renderer.domElement);
+            renderer.render(scene, camera);
+
         });
-        console.log(scene);
 
-
-        renderer.setPixelRatio(window.devicePixelRatio);
-        renderer.setSize(width, height);
-
-        container.appendChild(renderer.domElement);
-        renderer.render(scene, camera);
 
     }
 }
