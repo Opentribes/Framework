@@ -1,5 +1,4 @@
 import Tile from "./Tile";
-import {GLTFLoader} from "three/examples/jsm/loaders/GLTFLoader";
 import {Loader} from "three/src/Three";
 
 export default class TileRepository {
@@ -35,7 +34,7 @@ export default class TileRepository {
         tileData.forEach(function(data,index){
             let currentTileIndex = promises[index].id;
             let currentTile = obj.tileList.get(currentTileIndex);
-            currentTile.mesh = data.scene.children[0];
+            currentTile.object = data.scene;
             obj.tileList.set(currentTileIndex,currentTile);
         });
         return this.tileList;
