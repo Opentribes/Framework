@@ -34,6 +34,7 @@ export default class TileRepository {
         tileData.forEach((data, index) => {
             let currentTileIndex = promises[index].id;
             let currentTile = scope.tileList.get(currentTileIndex);
+            data.scene.parent = null;
             currentTile.object = data.scene;
             scope.tileList.set(currentTileIndex, currentTile);
         });
