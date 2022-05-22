@@ -31,14 +31,22 @@ export default class extends Controller {
 
         const hemi = new THREE.HemisphereLight(0xffffbb, 0x080820, 1);
 
-        camera.position.set(0, 20, -20);
+
+        controls.enableDamping = true; // an animation loop is required when either damping or auto-rotation are enabled
+        controls.dampingFactor = 0.05;
+
+        controls.minDistance = 10;
+        controls.maxDistance = 30;
+
+        camera.position.set(0, 10, -20);
+
         hemi.position.set(0, 20, 0);
 
 
         scene.add(hemi);
 
 
-        console.log(mapDataJson.layers.background);
+
         mapDataJson.layers.background.forEach(function (tileJson) {
             const currentTile = tileList.get(tileJson.data);
             if (currentTile === undefined) {
