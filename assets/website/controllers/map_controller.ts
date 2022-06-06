@@ -3,8 +3,9 @@ import * as THREE from 'three'
 import {GLTFLoader} from "three/examples/jsm/loaders/GLTFLoader";
 import TileRepository from "../src/TileRepository";
 
-import {OrbitControls} from "three/examples/jsm/controls/OrbitControls";
-
+import {Vector2, Vector3} from "three";
+import {degToRad} from "three/src/math/MathUtils";
+import * as TWEEN from "@tweenjs/tween.js";
 
 export default class extends Controller {
     async connect() {
@@ -15,11 +16,12 @@ export default class extends Controller {
 
         const mapDataJson = JSON.parse(container.getAttribute('data-map'));
         const tilePath = container.getAttribute('data-tilePath');
-        const halfPi = Math.PI/2;
+        const halfPi = Math.PI / 2;
         const camera = new THREE.PerspectiveCamera(45, aspectRatio, 1, 10000);
         const scene = new THREE.Scene();
+
         const renderer = new THREE.WebGLRenderer({antialias: true, alpha: true});
-        const controls = new OrbitControls(camera, renderer.domElement);
+
 
 
         const loader = new GLTFLoader();
@@ -31,18 +33,21 @@ export default class extends Controller {
 
         const hemi = new THREE.HemisphereLight(0xffffbb, 0x080820, 1);
 
-        const axesHelper = new THREE.AxesHelper(2);
+        const axesHelper = new THREE.AxesHelper(5);
+        scene.rotateZ(degToRad(-90));
 
-        axesHelper.rotation.set(-halfPi,0,-halfPi);
+        scene.position.set(0, 0, 0);
+
+
         scene.add(axesHelper);
 
-        controls.enableDamping = true; // an animation loop is required when either damping or auto-rotation are enabled
-        controls.dampingFactor = 0.05;
 
-        controls.minDistance = 5;
-        controls.maxDistance = 30;
-        camera.position.set(0, 10,0);
-        hemi.position.set(0, 20, 0);
+
+        camera.lookAt(new Vector3(0, 0, 0));
+        camera.position.set(0, -20, 20);
+        camera.rotation.x = degToRad(33);
+
+        hemi.position.set(0, 0, 100);
 
         scene.add(hemi);
 
@@ -54,27 +59,58 @@ export default class extends Controller {
             const meshData = currentTile.object.clone(true);
 
             meshData.uuid = tileJson.id;
-
-            meshData.position.set(tileJson.location.x, 0,tileJson.location.y);
+            meshData.rotateX(halfPi);
+            meshData.position.set(tileJson.location.x, tileJson.location.y, 0);
             meshData.scale.set(0.5, 0.5, 0.5);
             scene.add(meshData);
         });
 
-
+        container.appendChild(renderer.domElement);
         renderer.setPixelRatio(window.devicePixelRatio);
         renderer.setSize(width, height);
 
-        container.appendChild(renderer.domElement);
-        controls.update();
+        const moveSpeed = 2;
 
 
-        animate();
+        document.addEventListener('keypress', function (e) {
 
-        function animate() {
+            const position = {
+                x: camera.position.x,
+                y: camera.position.y
+            };
+            const vector = new Vector2(0, 0);
+
+            if (e.key === 'd') {
+                vector.x = moveSpeed;
+            }
+            if (e.key === 'a') {
+                vector.x = -moveSpeed;
+            }
+            if (e.key === 'w') {
+                vector.y = moveSpeed;
+            }
+            if (e.key === 's') {
+                vector.y = -moveSpeed;
+            }
+
+            const tween = new TWEEN.Tween(position)
+                .to({x: position.x + vector.x, y: position.y + vector.y}, 100)
+                .easing(TWEEN.Easing.Quadratic.Out)
+                .onUpdate(function () {
+                    camera.position.set(position.x, position.y, camera.position.z);
+
+                })
+                .start();
+
+        });
+
+
+        animate(0);
+
+        function animate(time) {
 
             requestAnimationFrame(animate);
-            // required if controls.enableDamping or controls.autoRotate are set to true
-            controls.update();
+            TWEEN.update(time);
             renderer.render(scene, camera);
         }
 
