@@ -4,3 +4,4 @@
 appveyor.yml export-ignore
 /.circleci export-ignore
 /.github export-ignore
+storage/map/main.txt filter=lfs diff=lfs merge=lfs -text
