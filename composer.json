@@ -23,10 +23,11 @@
         }
     ],
     "require": {
-        "opentribes/game": "dev-main",
+        "blackscorp/simplexnoise": "^0.1.0",
         "doctrine/dbal": "^3.2",
         "doctrine/doctrine-migrations-bundle": "^3.2",
         "doctrine/orm": "^2.11.0",
+        "opentribes/game": "dev-main",
         "sensio/framework-extra-bundle": "^6.2",
         "sulu/community-bundle": "^2@dev",
         "symfony/flex": "^1.17 || ^2.0",

@@ -50,9 +50,12 @@ services:
 
     OpenTribes\Core\UseCase\ViewMapUseCase:
       arguments: [
-        '@App\Repository\TextMapTileRepository',
+        '@App\Repository\SimplexNoiseTileRepository',
         '@App\Repository\DBALCityRepository'
       ]
+
+    App\Repository\SimplexNoiseTileRepository:
+        arguments: [ '@BlackScorp\SimplexNoise\Noise2D']
 
     App\Repository\TextMapTileRepository:
         arguments: [
@@ -67,3 +70,6 @@ services:
     App\Repository\DBALUserRepository:
         arguments: ['App\Entity\User']
         factory: [ '@doctrine.orm.default_entity_manager','getRepository' ]
+
+    BlackScorp\SimplexNoise\Noise2D:
+        arguments: [0.0025,3,0.5,1.5]

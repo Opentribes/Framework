@@ -29,11 +29,11 @@ final class HttpMapMessage implements CreateFirstCityMessage, ViewMapMessage
         $this->location = new Location($locationX,$locationY);
     }
 
-    public function getViewortWidth(): int
+    public function getViewportWidth(): int
     {
         return (int)$this->request->server->get('VIEWPORT_WIDTH', 0);
     }
-    public function getViewortHeight(): int
+    public function getViewportHeight(): int
     {
         return (int)$this->request->server->get('VIEWPORT_HEIGHT', 0);
     }
@@ -65,7 +65,7 @@ final class HttpMapMessage implements CreateFirstCityMessage, ViewMapMessage
 
     public function getViewport(): Viewport
     {
-        return new Viewport($this->location, $this->getViewortWidth(), $this->getViewortHeight());
+        return new Viewport($this->location, $this->getViewportWidth(), $this->getViewportHeight());
     }
 
     public function setMap(MapView $map): void
