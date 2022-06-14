@@ -26,16 +26,17 @@ final class HttpMapMessage implements CreateFirstCityMessage, ViewMapMessage
     {
         $locationX = (int)$this->request->get('locationX');
         $locationY = (int)$this->request->get('locationY');
-        $this->location = new Location($locationX,$locationY);
+        $this->location = new Location($locationX, $locationY);
     }
 
     public function getViewportWidth(): int
     {
-        return (int)$this->request->server->get('VIEWPORT_WIDTH', 0);
+        return (int)$this->request->get('viewportWidth', (int)$this->request->server->get('VIEWPORT_WIDTH', 0));
     }
+
     public function getViewportHeight(): int
     {
-        return (int)$this->request->server->get('VIEWPORT_HEIGHT', 0);
+        return (int)$this->request->get('viewportHeight', (int)$this->request->server->get('VIEWPORT_HEIGHT', 0));
     }
 
     public function hasCities(): bool

@@ -9,6 +9,7 @@ use OpenTribes\Core\UseCase\CreateFirstCityUseCase;
 use OpenTribes\Core\UseCase\ViewMapUseCase;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
 use Sulu\Bundle\CommunityBundle\Controller\AbstractController;
+use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
@@ -24,15 +25,31 @@ final class MapController extends AbstractController
         private SerializerInterface $serializer
     ) {
     }
+
     #[Route(path: '/map/{locationX<\d+>?0}/{locationY<\d+>?0}')]
     public function indexAction(Request $request): Response
     {
-
         $message = new HttpMapMessage($request);
-        $this->createNewCityUseCase->process($message);
-        $this->viewMapUseCase->process($message);
-        $jsonMapData = $this->serializer->serialize($message->map,'json');
 
-        return $this->render('pages/map.html.twig', ['jsonMapData'=>$jsonMapData,'map'=>$message->map]);
+        $this->createNewCityUseCase->process($message);
+
+        $this->viewMapUseCase->process($message);
+        $jsonMapData = $this->serializer->serialize($message->map, 'json');
+        $responseData = [
+            'jsonCenterLocation' => json_encode(
+                ['x' => $message->location->getX(), 'y' => $message->location->getY()]
+            ),
+            'jsonMapData' => $jsonMapData
+        ];
+
+        if($request->isXmlHttpRequest()){
+            return new JsonResponse($responseData);
+        }
+
+        return $this->render(
+            'pages/map.html.twig',
+            $responseData
+        );
     }
+
 }

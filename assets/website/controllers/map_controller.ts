@@ -15,13 +15,13 @@ export default class extends Controller {
         const aspectRatio = width / height;
 
         const mapDataJson = JSON.parse(container.getAttribute('data-map'));
+        const mapCenterPosition = JSON.parse(container.getAttribute('data-centerLocation'));
         const tilePath = container.getAttribute('data-tilePath');
         const halfPi = Math.PI / 2;
         const camera = new THREE.PerspectiveCamera(45, aspectRatio, 1, 10000);
         const scene = new THREE.Scene();
 
         const renderer = new THREE.WebGLRenderer({antialias: true, alpha: true});
-
 
 
         const loader = new GLTFLoader();
@@ -34,7 +34,7 @@ export default class extends Controller {
         const hemi = new THREE.HemisphereLight(0xffffbb, 0x080820, 1);
 
         const axesHelper = new THREE.AxesHelper(5);
-        scene.rotateZ(degToRad(-90));
+        const offset = 20;
 
         scene.position.set(0, 0, 0);
 
@@ -42,12 +42,12 @@ export default class extends Controller {
         scene.add(axesHelper);
 
 
-
+        axesHelper.position.set(mapCenterPosition.x, 0, mapCenterPosition.y);
         camera.lookAt(new Vector3(0, 0, 0));
-        camera.position.set(0, -20, 20);
-        camera.rotation.x = degToRad(33);
+        camera.position.set(mapCenterPosition.x, 10, mapCenterPosition.y + offset);
+        camera.rotateX(degToRad(-33));
 
-        hemi.position.set(0, 0, 100);
+        hemi.position.set(0, 20, 0);
 
         scene.add(hemi);
 
@@ -59,8 +59,7 @@ export default class extends Controller {
             const meshData = currentTile.object.clone(true);
 
             meshData.uuid = tileJson.id;
-            meshData.rotateX(halfPi);
-            meshData.position.set(tileJson.location.x, tileJson.location.y, 0);
+            meshData.position.set(tileJson.location.x, 0, tileJson.location.y);
             meshData.scale.set(0.5, 0.5, 0.5);
             scene.add(meshData);
         });
@@ -76,9 +75,9 @@ export default class extends Controller {
 
             const position = {
                 x: camera.position.x,
-                y: camera.position.y
+                z: camera.position.z
             };
-            const vector = new Vector2(0, 0);
+            const vector = new Vector3(0, 0, 0);
 
             if (e.key === 'd') {
                 vector.x = moveSpeed;
@@ -87,18 +86,17 @@ export default class extends Controller {
                 vector.x = -moveSpeed;
             }
             if (e.key === 'w') {
-                vector.y = moveSpeed;
+                vector.z = -moveSpeed;
             }
             if (e.key === 's') {
-                vector.y = -moveSpeed;
+                vector.z = moveSpeed;
             }
 
             const tween = new TWEEN.Tween(position)
-                .to({x: position.x + vector.x, y: position.y + vector.y}, 100)
+                .to({x: position.x + vector.x, z: position.z + vector.z}, 50)
                 .easing(TWEEN.Easing.Quadratic.Out)
                 .onUpdate(function () {
-                    camera.position.set(position.x, position.y, camera.position.z);
-
+                    camera.position.set(position.x, camera.position.y, position.z);
                 })
                 .start();
 
