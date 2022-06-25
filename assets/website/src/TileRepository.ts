@@ -14,9 +14,9 @@ export default class TileRepository {
 
     _prepareTiles() {
         this.tileList = new Map();
-        this.tileList.set('0001', {id: '0001', fileName: 'gras'});
-        this.tileList.set('0002', {id: '0002', fileName: 'sea'});
-        this.tileList.set('0003', {id: '0003', fileName: 'mountain'});
+        this.tileList.set('1', {id: '1', fileName: 'gras'});
+        this.tileList.set('2', {id: '2', fileName: 'sea'});
+        this.tileList.set('3', {id: '3', fileName: 'mountain'});
     }
 
     async getTileList() {

@@ -7,8 +7,10 @@ import {Vector2, Vector3} from "three";
 import {degToRad} from "three/src/math/MathUtils";
 import * as TWEEN from "@tweenjs/tween.js";
 
+
 export default class extends Controller {
     async connect() {
+        const debug = true;
         const container: Element = this.element;
         const width = container.clientWidth;
         const height = container.clientHeight;
@@ -20,32 +22,35 @@ export default class extends Controller {
         const halfPi = Math.PI / 2;
         const camera = new THREE.PerspectiveCamera(45, aspectRatio, 1, 10000);
         const scene = new THREE.Scene();
-
         const renderer = new THREE.WebGLRenderer({antialias: true, alpha: true});
-
-
         const loader = new GLTFLoader();
-
         const tileRepository = new TileRepository(tilePath, loader);
-
-
         const tileList = await tileRepository.getTileList();
-
         const hemi = new THREE.HemisphereLight(0xffffbb, 0x080820, 1);
-
-        const axesHelper = new THREE.AxesHelper(5);
-        const offset = 20;
-
-        scene.position.set(0, 0, 0);
-
+        const axesHelper = new   THREE.AxesHelper(5);
+        let updateBox = new THREE.Box3();
+        const offset = 15;
+        const updateBoxOffset = 9;
+        const material = new THREE.MeshBasicMaterial( { color: 0x0000ff } );
+        const mapPointer = new THREE.Mesh( new THREE.BoxGeometry( 0.5, 0, 0.5 ), material );
+        const updateBoxSize =  new Vector3(20, 10, 20);
 
         scene.add(axesHelper);
-
-
         axesHelper.position.set(mapCenterPosition.x, 0, mapCenterPosition.y);
-        camera.lookAt(new Vector3(0, 0, 0));
-        camera.position.set(mapCenterPosition.x, 10, mapCenterPosition.y + offset);
-        camera.rotateX(degToRad(-33));
+        camera.position.set(mapCenterPosition.x, 10, mapCenterPosition.y+offset);
+
+        camera.rotateX(degToRad(-35));
+
+        updateBox.setFromCenterAndSize(new Vector3(mapCenterPosition.x, 5, mapCenterPosition.y+updateBoxOffset), updateBoxSize);
+
+
+        let boxHelper = new THREE.Box3Helper(updateBox, new THREE.Color(0xff0000));
+        scene.add(boxHelper);
+
+
+        mapPointer.position.set(mapCenterPosition.x, 0.2, mapCenterPosition.y);
+
+        scene.add( mapPointer );
 
         hemi.position.set(0, 20, 0);
 
@@ -68,14 +73,14 @@ export default class extends Controller {
         renderer.setPixelRatio(window.devicePixelRatio);
         renderer.setSize(width, height);
 
-        const moveSpeed = 2;
+        const moveSpeed = 0.5;
 
 
         document.addEventListener('keypress', function (e) {
 
             const position = {
-                x: camera.position.x,
-                z: camera.position.z
+                x: mapPointer.position.x,
+                z: mapPointer.position.z
             };
             const vector = new Vector3(0, 0, 0);
 
@@ -96,7 +101,18 @@ export default class extends Controller {
                 .to({x: position.x + vector.x, z: position.z + vector.z}, 50)
                 .easing(TWEEN.Easing.Quadratic.Out)
                 .onUpdate(function () {
-                    camera.position.set(position.x, camera.position.y, position.z);
+                    camera.position.set(position.x, camera.position.y, position.z + offset);
+                    mapPointer.position.set(position.x, mapPointer.position.y, position.z);
+                }).onComplete(function (){
+
+                    if(!updateBox.containsPoint(mapPointer.position)){
+                        scene.remove(boxHelper);
+                        updateBox = new THREE.Box3();
+                        updateBox.setFromCenterAndSize(new Vector3(~~mapPointer.position.x, 5, ~~(mapPointer.position.y)+updateBoxOffset), updateBoxSize);
+                        boxHelper = new THREE.Box3Helper(updateBox, new THREE.Color(0xff0000));
+                        scene.add(boxHelper);
+                        console.log("Update",mapPointer.position);
+                    }
                 })
                 .start();
 
@@ -109,6 +125,7 @@ export default class extends Controller {
 
             requestAnimationFrame(animate);
             TWEEN.update(time);
+
             renderer.render(scene, camera);
         }
 
