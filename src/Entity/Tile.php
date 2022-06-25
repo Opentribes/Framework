@@ -8,7 +8,11 @@ use OpenTribes\Core\Utils\Location;
 
 final class Tile implements TileInterface
 {
-    public function __construct(private string $id,private string $data,private Location $location){}
+    public function __construct(private string $id,private string $data,private ?Location $location = null){
+        if($this->location === null){
+            $this->location = new Location(0,0);
+        }
+    }
 
 
     public function getLocation(): Location
