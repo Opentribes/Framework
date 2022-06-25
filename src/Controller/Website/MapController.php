@@ -13,16 +13,15 @@ use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
-use Symfony\Component\Serializer\Serializer;
-use Symfony\Component\Serializer\SerializerInterface;
+use Symfony\Component\Stopwatch\Stopwatch;
 
 #[IsGranted('IS_AUTHENTICATED_FULLY')]
 final class MapController extends AbstractController
 {
     public function __construct(
-        private CreateFirstCityUseCase $createNewCityUseCase,
-        private ViewMapUseCase $viewMapUseCase,
-        private SerializerInterface $serializer
+        private readonly CreateFirstCityUseCase $createNewCityUseCase,
+        private readonly ViewMapUseCase $viewMapUseCase,
+        private readonly Stopwatch $stopwatch
     ) {
     }
 
@@ -31,10 +30,18 @@ final class MapController extends AbstractController
     {
         $message = new HttpMapMessage($request);
 
+        $this->stopwatch->start('create-new-city');
         $this->createNewCityUseCase->process($message);
-
+        $this->stopwatch->stop('create-new-city');
+        $this->stopwatch->start('view-map');
         $this->viewMapUseCase->process($message);
-        $jsonMapData = $this->serializer->serialize($message->map, 'json');
+        $this->stopwatch->stop('view-map');
+
+
+        $this->stopwatch->start('serialize-map');
+        $jsonMapData = json_encode($message->map);
+        $this->stopwatch->stop('serialize-map');
+
         $responseData = [
             'jsonCenterLocation' => json_encode(
                 ['x' => $message->location->getX(), 'y' => $message->location->getY()]
@@ -42,7 +49,7 @@ final class MapController extends AbstractController
             'jsonMapData' => $jsonMapData
         ];
 
-        if($request->isXmlHttpRequest()){
+        if ($request->isXmlHttpRequest()) {
             return new JsonResponse($responseData);
         }
 
