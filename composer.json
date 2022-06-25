@@ -23,10 +23,13 @@
         }
     ],
     "require": {
-        "blackscorp/simplexnoise": "^0.1.0",
+        "ext-gd": "*",
+        "blackscorp/simplexnoise": "^0",
         "doctrine/dbal": "^3.2",
         "doctrine/doctrine-migrations-bundle": "^3.2",
         "doctrine/orm": "^2.11.0",
+        "league/flysystem": "^3.0",
+        "league/flysystem-bundle": "^2.2",
         "opentribes/game": "dev-main",
         "sensio/framework-extra-bundle": "^6.2",
         "sulu/community-bundle": "^2@dev",
