@@ -27,30 +27,30 @@ export default class extends Controller {
         const tileRepository = new TileRepository(tilePath, loader);
         const tileList = await tileRepository.getTileList();
         const hemi = new THREE.HemisphereLight(0xffffbb, 0x080820, 1);
-        const axesHelper = new   THREE.AxesHelper(5);
-        let updateBox = new THREE.Box3();
+        const axesHelper = new THREE.AxesHelper(5);
+        const updateBox = new THREE.Box3();
         const offset = 15;
         const updateBoxOffset = 9;
-        const material = new THREE.MeshBasicMaterial( { color: 0x0000ff } );
-        const mapPointer = new THREE.Mesh( new THREE.BoxGeometry( 0.5, 0, 0.5 ), material );
-        const updateBoxSize =  new Vector3(20, 10, 20);
+        const material = new THREE.MeshBasicMaterial({color: 0x0000ff});
+        const mapPointer = new THREE.Mesh(new THREE.BoxGeometry(0.5, 0, 0.5), material);
+        const updateBoxSize = new Vector3(20, 10, 20);
 
         scene.add(axesHelper);
         axesHelper.position.set(mapCenterPosition.x, 0, mapCenterPosition.y);
-        camera.position.set(mapCenterPosition.x, 10, mapCenterPosition.y+offset);
+        camera.position.set(mapCenterPosition.x, 10, mapCenterPosition.y + offset);
 
         camera.rotateX(degToRad(-35));
 
-        updateBox.setFromCenterAndSize(new Vector3(mapCenterPosition.x, 5, mapCenterPosition.y+updateBoxOffset), updateBoxSize);
+        updateBox.setFromCenterAndSize(new Vector3(mapCenterPosition.x, 5, mapCenterPosition.y + updateBoxOffset), updateBoxSize);
 
 
-        let boxHelper = new THREE.Box3Helper(updateBox, new THREE.Color(0xff0000));
+        const boxHelper = new THREE.Box3Helper(updateBox, new THREE.Color(0xff0000));
         scene.add(boxHelper);
 
 
         mapPointer.position.set(mapCenterPosition.x, 0.2, mapCenterPosition.y);
 
-        scene.add( mapPointer );
+        scene.add(mapPointer);
 
         hemi.position.set(0, 20, 0);
 
@@ -103,16 +103,12 @@ export default class extends Controller {
                 .onUpdate(function () {
                     camera.position.set(position.x, camera.position.y, position.z + offset);
                     mapPointer.position.set(position.x, mapPointer.position.y, position.z);
-                }).onComplete(function (){
+                }).onComplete(function () {
 
-                    if(!updateBox.containsPoint(mapPointer.position)){
-                        scene.remove(boxHelper);
-                        updateBox = new THREE.Box3();
-                        updateBox.setFromCenterAndSize(new Vector3(~~mapPointer.position.x, 5, ~~(mapPointer.position.y)+updateBoxOffset), updateBoxSize);
-                        boxHelper = new THREE.Box3Helper(updateBox, new THREE.Color(0xff0000));
-                        scene.add(boxHelper);
-                        console.log("Update",mapPointer.position);
+                    if (updateBox.containsPoint(mapPointer.position)) {
+                        return;
                     }
+                    boxHelper.box.setFromCenterAndSize(new Vector3(~~mapPointer.position.x, 5, ~~(mapPointer.position.z)), updateBoxSize);
                 })
                 .start();
 
