@@ -3,6 +3,8 @@
 parameters:
   default_locale: en
   sulu.model.user.class: App\Entity\User
+  map.width: '%env(MAP_WIDTH)%'
+  map.directory: '%kernel.project_dir%/var/storage/map'
 
 services:
   # default configuration for services in *this* file
@@ -54,6 +56,22 @@ services:
 
   App\Repository\SimplexNoiseTileRepository:
     arguments: [ '@BlackScorp\SimplexNoise\Noise2D' ]
+
+  App\Repository\TextMapTileRepository:
+    arguments: [
+      '%map.directory%',
+      '%map.width%'
+    ]
+
+  App\Command\GenerateMap:
+    arguments: ['%map.directory%']
+    tags:
+      - { name: console.command }
+
+  App\Command\GenerateMapPart:
+    arguments: ['%map.directory%']
+    tags:
+      - { name: console.command }
 
   OpenTribes\Core\Service\SimpleLocationFinder:
     arguments: [ '@App\Repository\DBALCityRepository','10' ]

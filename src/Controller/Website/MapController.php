@@ -13,6 +13,7 @@ use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Component\Serializer\SerializerInterface;
 use Symfony\Component\Stopwatch\Stopwatch;
 
 #[IsGranted('IS_AUTHENTICATED_FULLY')]
@@ -21,6 +22,7 @@ final class MapController extends AbstractController
     public function __construct(
         private readonly CreateFirstCityUseCase $createNewCityUseCase,
         private readonly ViewMapUseCase $viewMapUseCase,
+        private readonly SerializerInterface $serializer,
         private readonly Stopwatch $stopwatch
     ) {
     }
@@ -39,6 +41,7 @@ final class MapController extends AbstractController
 
 
         $this->stopwatch->start('serialize-map');
+        //$jsonMapData = $this->serializer->serialize($message->map, 'json');
         $jsonMapData = json_encode($message->map);
         $this->stopwatch->stop('serialize-map');
 
