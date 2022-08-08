@@ -6,6 +6,7 @@ import TileRepository from "../src/TileRepository";
 import {Vector2, Vector3} from "three";
 import {degToRad} from "three/src/math/MathUtils";
 import * as TWEEN from "@tweenjs/tween.js";
+import GameMap from "../src/GameMap";
 
 
 export default class extends Controller {
@@ -34,7 +35,7 @@ export default class extends Controller {
         const material = new THREE.MeshBasicMaterial({color: 0x0000ff});
         const mapPointer = new THREE.Mesh(new THREE.BoxGeometry(0.5, 0, 0.5), material);
         const updateBoxSize = new Vector3(20, 10, 20);
-
+        const map = new GameMap(tileList,scene);
         scene.add(axesHelper);
         axesHelper.position.set(mapCenterPosition.x, 0, mapCenterPosition.y);
         camera.position.set(mapCenterPosition.x, 10, mapCenterPosition.y + offset);
@@ -55,19 +56,8 @@ export default class extends Controller {
         hemi.position.set(0, 20, 0);
 
         scene.add(hemi);
+        map.drawTiles(mapDataJson);
 
-        mapDataJson.layers.background.forEach(function (tileJson) {
-            const currentTile = tileList.get(tileJson.data);
-            if (currentTile === undefined) {
-                return;
-            }
-            const meshData = currentTile.object.clone(true);
-
-            meshData.uuid = tileJson.id;
-            meshData.position.set(tileJson.location.x, 0, tileJson.location.y);
-            meshData.scale.set(0.5, 0.5, 0.5);
-            scene.add(meshData);
-        });
 
         container.appendChild(renderer.domElement);
         renderer.setPixelRatio(window.devicePixelRatio);
@@ -104,11 +94,18 @@ export default class extends Controller {
                     camera.position.set(position.x, camera.position.y, position.z + offset);
                     mapPointer.position.set(position.x, mapPointer.position.y, position.z);
                 }).onComplete(function () {
-
                     if (updateBox.containsPoint(mapPointer.position)) {
                         return;
                     }
-                    boxHelper.box.setFromCenterAndSize(new Vector3(~~mapPointer.position.x, 5, ~~(mapPointer.position.z)), updateBoxSize);
+
+                    const position = new Vector3(~~mapPointer.position.x, 5, ~~(mapPointer.position.z));
+                    boxHelper.box.setFromCenterAndSize(position, updateBoxSize);
+                    const headers = new Headers();
+                    headers.append('X-Requested-With','XMLHttpRequest');
+
+                    fetch(`/map/${position.x}/${position.z}?viewportHeight=20&viewportWidth=20`,{headers:headers}).then((response)=> response.json()).then(function (data){
+                        map.drawTiles(data.jsonMapData);
+                    })
                 })
                 .start();
 

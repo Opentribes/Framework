@@ -37,21 +37,25 @@ final class MapController extends AbstractController
         $this->viewMapUseCase->process($message);
         $this->stopwatch->stop('view-map');
 
-
-        $this->stopwatch->start('serialize-map');
-        $jsonMapData = json_encode($message->map);
-        $this->stopwatch->stop('serialize-map');
-
         $responseData = [
-            'jsonCenterLocation' => json_encode(
-                ['x' => $message->location->getX(), 'y' => $message->location->getY()]
-            ),
-            'jsonMapData' => $jsonMapData
+            'jsonCenterLocation' =>
+                [
+                    'x' => $message->location->getX(),
+                    'y' => $message->location->getY()
+                ],
+            'jsonMapData' => $message->map
         ];
 
         if ($request->isXmlHttpRequest()) {
             return new JsonResponse($responseData);
         }
+
+        $this->stopwatch->start('serialize-map');
+        $responseData['jsonCenterLocation'] = json_encode($responseData['jsonCenterLocation']);
+        $responseData['jsonMapData'] = json_encode($responseData['jsonMapData']);
+        $this->stopwatch->stop('serialize-map');
+        
+
 
         return $this->render(
             'pages/map.html.twig',
