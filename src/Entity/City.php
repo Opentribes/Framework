@@ -5,10 +5,12 @@ declare(strict_types=1);
 namespace App\Entity;
 
 use App\Repository\DBALCityRepository;
+use DateTimeImmutable;
 use DateTimeInterface;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
+
 use OpenTribes\Core\Entity\BuildingCollection;
 use OpenTribes\Core\Entity\City as CityInterface;
 use OpenTribes\Core\Entity\User;
@@ -22,11 +24,11 @@ class City implements CityInterface
 {
     #[ORM\Id]
     #[ORM\GeneratedValue(strategy: 'IDENTITY')]
-    #[ORM\Column(type: 'integer')]
+    #[ORM\Column(name:'id',type: 'integer',options: ['unsigned' => true])]
     private int $id;
 
-    #[ORM\Column(name: 'user_id', type: 'integer')]
-    private int $userId;
+    #[ORM\Column(name: 'user_id', type: 'integer',nullable: true)]
+    private ?int $userId;
 
     #[ORM\Column(name: 'location_x', type: 'integer')]
     private int $locationX;
@@ -37,8 +39,8 @@ class City implements CityInterface
     private DateTimeInterface $createdAt;
 
     #[ORM\ManyToOne(targetEntity: \App\Entity\User::class, inversedBy: 'cities')]
-    #[ORM\JoinColumn(name: 'user_id', referencedColumnName: 'id')]
-    private User $user;
+    #[ORM\JoinColumn(name: 'user_id', referencedColumnName: 'id', nullable: true)]
+    private ?User $user;
 
     #[ORM\OneToMany(mappedBy: 'city', targetEntity: Building::class, orphanRemoval: true)]
     private Collection $buildings;
@@ -47,6 +49,7 @@ class City implements CityInterface
     {
         $this->setLocation($location);
         $this->buildings = new ArrayCollection();
+        $this->createdAt = new DateTimeImmutable();
     }
 
     public function getLocation(): Location
@@ -74,7 +77,7 @@ class City implements CityInterface
         $this->buildings = new ArrayCollection($buildings->getElements());
     }
 
-    public function getUser(): User
+    public function getUser(): ?User
     {
         return $this->user;
     }
