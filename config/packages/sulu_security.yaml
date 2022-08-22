@@ -1,0 +1,5 @@
+sulu_security:
+  objects:
+    user:
+      model: App\Entity\User
+      repository: App\Repository\DBALUserRepository
