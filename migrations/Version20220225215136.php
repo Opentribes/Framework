@@ -21,7 +21,7 @@ final class Version20220225215136 extends AbstractMigration
     {
         $sql = <<<SQL
 CREATE TABLE IF NOT EXISTS`ot_city` (
-  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `id` int(11) UNSIGNED NOT NULL AUTO_INCREMENT,
   `created_at` timestamp NOT NULL DEFAULT current_timestamp(),
   `location_x` int(11) NOT NULL,
   `location_y` int(11) NOT NULL,
@@ -49,7 +49,7 @@ ALTER TABLE `ot_building`
 DROP COLUMN `location_x`,
 DROP COLUMN `location_y`,
 DROP COLUMN `username`,
-ADD COLUMN `city_id` int(11) NOT NULL,
+ADD COLUMN `city_id` int(11) UNSIGNED NOT NULL,
 ADD CONSTRAINT `FK_city` FOREIGN KEY (`city_id`) REFERENCES `ot_city` (`id`) ON UPDATE CASCADE ON DELETE CASCADE, 
 ADD CONSTRAINT `UNQ_clot_in_city` UNIQUE (`slot`,`city_id`)
 SQL;
