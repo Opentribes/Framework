@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace App\Entity;
 
 use App\Repository\DBALBuildingRepository;
+use DateTimeImmutable;
 use DateTimeInterface;
 use Doctrine\ORM\Mapping as ORM;
 use OpenTribes\Core\Entity\Building as BuildingInterface;
@@ -35,12 +36,13 @@ class Building implements BuildingInterface
     #[ORM\JoinColumn(name: 'city_id', referencedColumnName: 'id')]
     private CityInterface $city;
 
-    #[ORM\Column(type: 'string', enumType: BuildStatus::class, options: ['default' => 'default'])]
+    #[ORM\Column(type: 'BuildStatusType', options: ['default' => 'default'])]
     private BuildStatus $status;
 
     public function __construct(private string $name, private int $maximumLevel)
     {
         $this->status = BuildStatus::default;
+        $this->createdAt = new DateTimeImmutable();
     }
 
     public function setSlot(string $slot): void
