@@ -8,16 +8,25 @@ use App\Entity\Building;
 use App\Entity\City;
 use App\Entity\User;
 use Doctrine\Bundle\FixturesBundle\Fixture;
+use Doctrine\Bundle\FixturesBundle\FixtureGroupInterface;
 use Doctrine\Persistence\ObjectManager;
 use OpenTribes\Core\Entity\BuildingCollection;
 use OpenTribes\Core\Utils\Location;
 use Sulu\Bundle\ContactBundle\Entity\Contact;
 
-final class BuildingFixture extends Fixture
+final class BuildingFixture extends Fixture implements  FixtureGroupInterface
 {
     private ObjectManager $manager;
+
+    public static function getGroups(): array
+    {
+        return ['test'];
+    }
+
+
     public function load(ObjectManager $manager): void
     {
+
         $this->manager = $manager;
         $user = $this->createUser('test_without');
 
