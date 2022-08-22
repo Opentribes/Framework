@@ -80,6 +80,12 @@
             "bin/adminconsole doctrine:phpcr:workspace:import -p /cmf data/cmf.xml",
             "bin/websiteconsole doctrine:phpcr:workspace:import -p /cmf data/cmf_live.xml",
             "bin/adminconsole doctrine:phpcr:workspace:import -p /jcr:versions data/datajcr.xml"
+        ],
+        "sulu:prepare-test-db": [
+            "@php bin/adminconsole doctrine:database:drop --if-exists --force --env test",
+            "@php bin/adminconsole doctrine:database:create --env test",
+            "@php bin/adminconsole doctrine:schema:create --env test",
+            "@php bin/adminconsole doctrine:fixtures:load --group=test -n --env test"
         ]
     },
     "extra": {
