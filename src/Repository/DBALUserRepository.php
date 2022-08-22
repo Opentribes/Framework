@@ -8,7 +8,7 @@ use OpenTribes\Core\Entity\User as UserInterface;
 use OpenTribes\Core\Repository\UserRepository;
 use Sulu\Bundle\SecurityBundle\Entity\UserRepository as SuluUserRepository;
 
-final class DBALUserRepository extends SuluUserRepository implements UserRepository
+class DBALUserRepository extends SuluUserRepository implements UserRepository
 {
     public function findByUsername(string $username): UserInterface
     {
